@@ -54,8 +54,9 @@ class _UserInfoState extends State<UserInfo> {
             color: greyK.withOpacity(.3),
           ).paddingOnly(bottom: 10),
           textViewField(
-            null, null,
-
+            icon: null,
+            controller: null,
+            hint: null,
             ontap: () async {
               Get.closeAllSnackbars();
               await Get.closeCurrentSnackbar();
@@ -73,8 +74,8 @@ class _UserInfoState extends State<UserInfo> {
             label: 'First Name',
           ),
           textViewField(
-            null,
-            null,
+            controller: null,
+            icon: null,
             ontap: () async {
               Get.closeAllSnackbars();
               await Get.closeCurrentSnackbar();
@@ -89,10 +90,12 @@ class _UserInfoState extends State<UserInfo> {
             },
             initialVal: lastname,
             label: 'Last Name',
+            hint: null,
           ),
           textViewField(
-            null,
-            null,
+            controller: null,
+            icon: null,
+            hint: null,
             ontap: () async {
               Get.closeAllSnackbars();
               await Get.closeCurrentSnackbar();
@@ -110,8 +113,10 @@ class _UserInfoState extends State<UserInfo> {
           ),
           Obx(
             () => textViewField(
-              dOB.value,
-              Icon(
+              hint: 'Enter Date of Birth',
+              label: 'Date of Birth',
+              controller: dOB.value,
+              icon: Icon(
                 Ionicons.calendar_outline,
                 color: Get.theme.primaryColor,
               ),
@@ -134,7 +139,6 @@ class _UserInfoState extends State<UserInfo> {
                 );
               },
               initialVal: null,
-              label: 'Date of Birth',
             ),
           ),
         ],

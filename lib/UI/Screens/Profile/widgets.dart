@@ -3,88 +3,6 @@ import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pharm_quiz/utils/app_constants.dart';
-
-/// Editing environment widget.
-/// Carries a child used in editind required variables
-// Future edi(Widget child, {required context}) async => await Get.bottomSheet(
-//       SingleChildScrollView(
-//         child: Container(
-//           width: MediaQuery.of(context).size.width,
-//           padding:
-//               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-//           child: child,
-//         ),
-//       ),
-//       isScrollControlled: true,
-//       enableDrag: false,
-//       shape: const RoundedRectangleBorder(
-//         borderRadius: BorderRadius.only(
-//           topLeft: Radius.circular(20),
-//           topRight: Radius.circular(20),
-//         ),
-//       ),
-//     );
-
-/// read only textformfield
-/// used for viewing userpersonal data without being able to edit it.
-Widget textViewField(
-  controller,
-  icon, {
-  required ontap,
-  required initialVal,
-  required label,
-}) {
-  return TextFormField(
-    readOnly: true,
-    onTap: ontap,
-    controller: controller,
-    style: poppins.copyWith(fontSize: 14),
-    initialValue: initialVal,
-    decoration: InputDecoration(
-      suffixIcon: icon ?? const Icon(Ionicons.pencil_outline),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-      label: Text(
-        label,
-        style: poppins.copyWith(fontWeight: FontWeight.w700),
-      ),
-      border: const UnderlineInputBorder(),
-    ),
-  ).paddingOnly(bottom: 25);
-}
-
-/// Textformfield that allows for editing of texts...
-/// ...or different variable constants.
-Widget textEditField(
-  controller, {
-  required onchanged,
-  required initialVal,
-  required label,
-}) {
-  return TextFormField(
-    onChanged: onchanged,
-    autofocus: true,
-    style: poppins.copyWith(fontSize: 14),
-    initialValue: initialVal,
-    controller: controller,
-    decoration: InputDecoration(
-      fillColor: whiteK,
-      filled: true,
-      // suffixIcon: IconButton(
-      //   icon: Icon(Ionicons.close),
-      //   onPressed: (){},
-      // ).paddingOnly(right: 5),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-      label: Text(
-        label,
-        style: poppins.copyWith(fontWeight: FontWeight.w700),
-      ),
-      border: OutlineInputBorder(
-        borderRadius: curved,
-      ),
-    ),
-  );
-}
-
 /// button used for app functions
 Widget elevatedButton({required text, required onpressed}) {
   return ElevatedButton(
@@ -329,7 +247,6 @@ Widget helpCenterTile(trailing,
 }
 
 ///End of settings widgets
-///
 ///
 ///STATISTICS WIDGETS
 Widget achievementTile({required leading, required title, required subtitle}) {

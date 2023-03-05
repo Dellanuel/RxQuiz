@@ -1,16 +1,12 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-// app name
-String appname = 'RxQuizz';
 
 // styles
 final robotoSlab = GoogleFonts.robotoSlab();
 final montserrat =
     GoogleFonts.montserrat(fontSize: 15, fontWeight: FontWeight.w400);
-final raleway = GoogleFonts.raleway();
+final raleway = GoogleFonts.raleway(fontSize: 16, fontWeight: FontWeight.w500);
 
 /// default textstyle for app texts
 final bolo = GoogleFonts.baloo2(fontSize: 15, fontWeight: FontWeight.w400);
@@ -22,7 +18,7 @@ final abeezee = GoogleFonts.aBeeZee(fontSize: 13, fontWeight: FontWeight.w400);
 final poppins = GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400);
 
 /// use for appbar textstyles
-final bigBolo = bolo.copyWith(fontSize: 20, fontWeight: FontWeight.w500);
+final bigBolo = bolo.copyWith(fontSize: 20, fontWeight: FontWeight.w600);
 
 // button styles
 ButtonStyle textButtonStyl = ButtonStyle(

@@ -199,36 +199,36 @@ class SalesData {
   final double sales;
 }
 
-///radial bar for user success{success page}
-Widget radialBarWidget() {
-  return SfCircularChart(
-    margin: const EdgeInsets.all(0),
-    series: <RadialBarSeries<ChartData, String>>[
-      RadialBarSeries<ChartData, String>(
-        maximumValue: 100,
-        radius: '100%',
-        gap: '15%',
-        strokeWidth: 3,
-        innerRadius: '30%',
-        dataSource: <ChartData>[
-          ChartData(
-            x: 'Move 65%\n338/520 CAL',
-            y: 65,
-            text: 'Move  ',
-          ),
-          ChartData(
-            x: 'Exercise 43%\n13/30 MIN',
-            y: 43,
-            text: 'Exercise  ',
-          ),
-        ],
-        cornerStyle: CornerStyle.bothCurve,
-        xValueMapper: (ChartData data, _) => data.x as String,
-        yValueMapper: (ChartData data, _) => data.y,
-        dataLabelMapper: (ChartData data, _) => data.text,
-        dataLabelSettings: const DataLabelSettings(isVisible: true),
-      )
-    ],
-    tooltipBehavior: TooltipBehavior(),
-  );
-}
+// ///radial bar for user success{success page}
+// Widget radialBarWidget() {
+//   return SfCircularChart(
+//     margin: const EdgeInsets.all(0),
+//     series: <RadialBarSeries<ChartData, String>>[
+//       RadialBarSeries<ChartData, String>(
+//         maximumValue: 100,
+//         radius: '100%',
+//         gap: '15%',
+//         strokeWidth: 3,
+//         innerRadius: '30%',
+//         dataSource: <ChartData>[
+//           ChartData(
+//             x: 'Move 65%\n338/520 CAL',
+//             y: 65,
+//             text: 'Move  ',
+//           ),
+//           ChartData(
+//             x: 'Exercise 43%\n13/30 MIN',
+//             y: 43,
+//             text: 'Exercise  ',
+//           ),
+//         ],
+//         cornerStyle: CornerStyle.bothCurve,
+//         xValueMapper: (ChartData data, _) => data.x as String,
+//         yValueMapper: (ChartData data, _) => data.y,
+//         dataLabelMapper: (ChartData data, _) => data.text,
+//         dataLabelSettings: const DataLabelSettings(isVisible: true),
+//       )
+//     ],
+//     tooltipBehavior: TooltipBehavior(),
+//   );
+// }

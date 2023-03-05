@@ -2,9 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:pharm_quiz/UI/Screens/Quiz/quiz_create.dart';
+import 'package:pharm_quiz/UI/Screens/Quiz/quiz_details.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:lottie/lottie.dart';
 import '../../../utils/app_constants.dart';
@@ -26,8 +27,10 @@ class FeaturesWidgetData {
 /// features widget data
 List<FeaturesWidgetData> featuresWidgetData = [
   FeaturesWidgetData(
-    name: 'Quick Quiz',
-    function: () {},
+    name: 'Create Quiz',
+    function: () {
+      Get.to(() => const CreateQZ());
+    },
   ),
   FeaturesWidgetData(
     name: 'Live Quiz',
@@ -48,134 +51,6 @@ List<FeaturesWidgetData> featuresWidgetData = [
 ];
 
 /// Room widget data
-class QuizModel {
-  String? fieldImage;
-  String? course;
-  Color? color;
-  String? authorsname;
-  String? quizname;
-  int? trend;
-
-  String? playsNum;
-
-  String? date;
-
-  String? questionnumber;
-
-  QuizModel({
-    this.quizname,
-    this.authorsname,
-    this.course,
-    this.color,
-    this.fieldImage,
-    this.trend,
-    this.date,
-    this.playsNum,
-    this.questionnumber,
-  });
-}
-
-List<QuizModel> quizModelData = [
-  QuizModel(
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    trend: 7,
-    quizname: 'QUIZ 0',
-    authorsname: 'Chinemelu',
-    fieldImage: phar,
-    color: Colors.pink,
-    course: 'Pharmceutics',
-  ),
-  QuizModel(
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    trend: 6,
-    quizname: 'QUIZ 1',
-    authorsname: 'Chinemelu',
-    fieldImage: chem,
-    color: Colors.red,
-    course: 'Pharm Chem',
-  ),
-  QuizModel(
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    trend: 7,
-    quizname: 'QUIZ 2',
-    authorsname: 'Chinemelu',
-    fieldImage: cog,
-    color: Colors.green,
-    course: 'Cognosy',
-  ),
-  QuizModel(
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    trend: 7,
-    quizname: 'QUIZ 3',
-    authorsname: 'Chinemelu',
-    fieldImage: col,
-    color: Colors.blue[900],
-    course: 'Cology',
-  ),
-  QuizModel(
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    trend: 3,
-    quizname: 'QUIZ 4',
-    authorsname: 'Chinemelu',
-    fieldImage: mcb,
-    color: Colors.orange,
-    course: 'Pharm MCB',
-  ),
-  QuizModel(
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    trend: 8,
-    quizname: 'QUIZ 5',
-    authorsname: 'Chinemelu',
-    fieldImage: bch,
-    color: Colors.purple,
-    course: 'Pharm BCH',
-  ),
-  QuizModel(
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    trend: 8,
-    quizname: 'QUIZ 6',
-    authorsname: 'Chinemelu',
-    fieldImage: cli,
-    color: Colors.amber,
-    course: 'Clinical Pharm',
-  ),
-  QuizModel(
-    trend: 7,
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    quizname: 'QUIZ 7',
-    authorsname: 'Chinemelu',
-    fieldImage: tech,
-    course: 'Pharm Tech',
-    color: Colors.lime,
-  ),
-  QuizModel(
-    trend: 9,
-    date: DateTime.now().toString(),
-    playsNum: '18',
-    questionnumber: '10',
-    quizname: 'QUIZ 8',
-    authorsname: 'Chinemelu',
-    fieldImage: sap,
-    color: Colors.teal,
-    course: 'SAP-Pharm',
-  ),
-];
 
 /// elevated ListTile
 Widget textButton(
@@ -257,7 +132,9 @@ Widget discoverQuiz() {
                 borderRadius: curved,
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => QuizDetails(index: index));
+                },
                 borderRadius: curved,
                 child: Container(
                   width: 135,
@@ -399,7 +276,7 @@ Widget trendingWidget() {
           width: 50,
           child: Center(
             child: Lottie.asset(
-              col,
+              colLottie,
               repeat: false,
               fit: BoxFit.fill,
             ),

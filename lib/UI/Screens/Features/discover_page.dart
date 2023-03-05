@@ -6,6 +6,7 @@ import 'package:pharm_quiz/UI/Screens/Profile/widgets.dart';
 
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
+import '../../../utils/dummy_data.dart';
 import '../Home/home_widgets.dart';
 
 class Discover extends StatefulWidget {

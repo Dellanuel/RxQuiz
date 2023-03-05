@@ -4,14 +4,16 @@ import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
 
+import '../UI/strings.dart';
 import 'app_constants.dart';
 
 /// widgets for AppBars
 Widget appbarButton(
     {required Widget icon, required void Function()? onpressed}) {
   return IconButton(
-    splashRadius: 27,
+    splashRadius: 25,
     style: ButtonStyle(
+      padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
       shape: MaterialStateProperty.all(const CircleBorder()),
     ),
     icon: icon,
@@ -115,4 +117,64 @@ Widget appLogo() {
       ],
     ),
   ).paddingAll(5);
+}
+
+Widget textViewField({
+  required icon,
+  required ontap,
+  required initialVal,
+  required controller,
+  required hint,
+  required label,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(
+        label,
+        style: poppins.copyWith(fontWeight: FontWeight.w600),
+      ),
+      TextFormField(
+        readOnly: true,
+        onTap: ontap,
+        controller: controller,
+        style: poppins.copyWith(fontSize: 14),
+        initialValue: initialVal,
+        decoration: InputDecoration(
+          hintText: hint,
+          suffixIcon: icon,
+          border: const UnderlineInputBorder(),
+        ),
+      ),
+    ],
+  ).paddingOnly(bottom: 15);
+}
+
+/// Textformfield that allows for editing of texts...
+/// ...or different variable constants.
+Widget textEditField({
+  required controller,
+  required label,
+  required hint,
+}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Text(
+        label,
+        style: poppins.copyWith(fontWeight: FontWeight.w600),
+      ),
+      TextFormField(
+        autofocus: true,
+        style: poppins.copyWith(fontSize: 14),
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: hint,
+          border: const UnderlineInputBorder(),
+        ),
+      ),
+    ],
+  ).paddingOnly(bottom: 15);
 }

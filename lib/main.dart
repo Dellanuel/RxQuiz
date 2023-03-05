@@ -14,6 +14,14 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: ThemeData(
         useMaterial3: true,
+        
+        iconTheme: IconThemeData(size: 23),
+        iconButtonTheme: IconButtonThemeData(
+          style: ButtonStyle(
+            iconSize: MaterialStatePropertyAll(22),
+            shape: MaterialStateProperty.all(const CircleBorder()),
+          ),
+        ),
         appBarTheme: AppBarTheme(
           shape: Border(
             bottom: BorderSide(
