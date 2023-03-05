@@ -8,7 +8,8 @@ String appname = 'RxQuizz';
 
 // styles
 final robotoSlab = GoogleFonts.robotoSlab();
-final montserrat = GoogleFonts.montserrat();
+final montserrat =
+    GoogleFonts.montserrat(fontSize: 15, fontWeight: FontWeight.w400);
 final raleway = GoogleFonts.raleway();
 
 /// default textstyle for app texts
@@ -44,4 +45,8 @@ Color blackK = Colors.black;
 Color creamK = const Color(0xfffdfbee);
 Color deepSeaBlueK = const Color(0xff09203F);
 Color lightSeaBlueK = const Color(0xff537895);
-Color randomColor = Color(Random().nextInt(0xffffffff));
+// Color randomColor = Color(Random().nextInt(0xffffffff));
+///
+///
+///Border Radius constant
+BorderRadius curved = BorderRadius.circular(20);

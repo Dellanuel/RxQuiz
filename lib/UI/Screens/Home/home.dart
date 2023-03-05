@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:pharm_quiz/UI/Screens/Features/discover_page.dart';
 import 'package:pharm_quiz/UI/Screens/Profile/profile.dart';
 import 'package:pharm_quiz/utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
@@ -51,9 +52,7 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: [
               appbarButton(
-                onpressed: () {
-                  // Get.to(() => const SettingsPage());
-                },
+                onpressed: () {},
                 icon: const Icon(Ionicons.search_outline),
               ),
               appbarButton(
@@ -66,19 +65,57 @@ class _HomePageState extends State<HomePage> {
             child: dashBoard(),
           ),
           SliverToBoxAdapter(
-            child: featuresWidget(),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.only(left: 15),
+              physics: const BouncingScrollPhysics(),
+              child: Row(
+                children: List.generate(
+                    featuresWidgetData.length,
+                    (index) => textButton(
+                          function: featuresWidgetData[index].function,
+                          title: featuresWidgetData[index].name!,
+                        ).marginOnly(left: 7)),
+              ).paddingOnly(bottom: 20),
+            ),
           ),
           SliverToBoxAdapter(
-              child: Padding(
-            padding: const EdgeInsets.only(left: 22, right: 22, top: 20),
-            child: Text(
-              'Rooms',
-              style: bolo.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
-            ),
-          )),
+            child: Row(
+              children: [
+                Text(
+                  'Discover',
+                  style:
+                      bolo.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
+                ),
+                Spacer(),
+                InkWell(
+                  borderRadius: curved,
+                  onTap: () {
+                    Get.to(() => const Discover());
+                  },
+                  child: Row(
+                    children: [
+                      Text(
+                        'more',
+                        style: raleway.copyWith(color: Get.theme.primaryColor),
+                      ),
+                      Icon(
+                        Ionicons.chevron_forward_outline,
+                        size: 15,
+                        color: Get.theme.primaryColor,
+                      )
+                    ],
+                  ).paddingSymmetric(horizontal: 5, vertical: 2),
+                ),
+              ],
+            ).paddingSymmetric(horizontal: 22),
+          ),
           SliverToBoxAdapter(
-            child: roomsWidget(),
-          )
+            child: discoverQuiz(),
+          ),
+          SliverToBoxAdapter(
+            child: trendingWidget(),
+          ),
         ],
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,6 @@ import '../../strings.dart';
 class FeaturesWidgetData {
   String? name;
   void Function()? function;
-  IconData? icon;
 
   FeaturesWidgetData({
     this.function,
@@ -47,63 +48,132 @@ List<FeaturesWidgetData> featuresWidgetData = [
 ];
 
 /// Room widget data
-class RoomWidgetData {
-  String? field;
-  String? roomname;
-  int? participantsnumber;
+class QuizModel {
+  String? fieldImage;
+  String? course;
+  Color? color;
+  String? authorsname;
+  String? quizname;
+  int? trend;
 
-  RoomWidgetData({
-    this.roomname,
-    this.participantsnumber,
-    this.field,
+  String? playsNum;
+
+  String? date;
+
+  String? questionnumber;
+
+  QuizModel({
+    this.quizname,
+    this.authorsname,
+    this.course,
+    this.color,
+    this.fieldImage,
+    this.trend,
+    this.date,
+    this.playsNum,
+    this.questionnumber,
   });
 }
 
-List<RoomWidgetData> roomwidgetData = [
-  RoomWidgetData(
-    field: phar,
-    participantsnumber: 5,
-    roomname: 'Pharmceutics',
+List<QuizModel> quizModelData = [
+  QuizModel(
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    trend: 7,
+    quizname: 'QUIZ 0',
+    authorsname: 'Chinemelu',
+    fieldImage: phar,
+    color: Colors.pink,
+    course: 'Pharmceutics',
   ),
-  RoomWidgetData(
-    field: chem,
-    participantsnumber: 5,
-    roomname: 'Pharm Chem',
+  QuizModel(
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    trend: 6,
+    quizname: 'QUIZ 1',
+    authorsname: 'Chinemelu',
+    fieldImage: chem,
+    color: Colors.red,
+    course: 'Pharm Chem',
   ),
-  RoomWidgetData(
-    field: cog,
-    participantsnumber: 5,
-    roomname: 'Cognosy',
+  QuizModel(
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    trend: 7,
+    quizname: 'QUIZ 2',
+    authorsname: 'Chinemelu',
+    fieldImage: cog,
+    color: Colors.green,
+    course: 'Cognosy',
   ),
-  RoomWidgetData(
-    field: col,
-    participantsnumber: 5,
-    roomname: 'Cology',
+  QuizModel(
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    trend: 7,
+    quizname: 'QUIZ 3',
+    authorsname: 'Chinemelu',
+    fieldImage: col,
+    color: Colors.blue[900],
+    course: 'Cology',
   ),
-  RoomWidgetData(
-    field: mcb,
-    participantsnumber: 5,
-    roomname: 'Pharm MCB',
+  QuizModel(
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    trend: 3,
+    quizname: 'QUIZ 4',
+    authorsname: 'Chinemelu',
+    fieldImage: mcb,
+    color: Colors.orange,
+    course: 'Pharm MCB',
   ),
-  RoomWidgetData(
-    field: bch,
-    participantsnumber: 5,
-    roomname: 'Pharm BCH',
+  QuizModel(
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    trend: 8,
+    quizname: 'QUIZ 5',
+    authorsname: 'Chinemelu',
+    fieldImage: bch,
+    color: Colors.purple,
+    course: 'Pharm BCH',
   ),
-  RoomWidgetData(
-    field: cli,
-    participantsnumber: 5,
-    roomname: 'Clinical Pharm',
+  QuizModel(
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    trend: 8,
+    quizname: 'QUIZ 6',
+    authorsname: 'Chinemelu',
+    fieldImage: cli,
+    color: Colors.amber,
+    course: 'Clinical Pharm',
   ),
-  RoomWidgetData(
-    field: tech,
-    roomname: 'Pharm Tech',
-    participantsnumber: 5,
+  QuizModel(
+    trend: 7,
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    quizname: 'QUIZ 7',
+    authorsname: 'Chinemelu',
+    fieldImage: tech,
+    course: 'Pharm Tech',
+    color: Colors.lime,
   ),
-  RoomWidgetData(
-    field: sap,
-    participantsnumber: 5,
-    roomname: 'SAP-Pharm',
+  QuizModel(
+    trend: 9,
+    date: DateTime.now().toString(),
+    playsNum: '18',
+    questionnumber: '10',
+    quizname: 'QUIZ 8',
+    authorsname: 'Chinemelu',
+    fieldImage: sap,
+    color: Colors.teal,
+    course: 'SAP-Pharm',
   ),
 ];
 
@@ -116,73 +186,9 @@ Widget textButton(
     child: Center(
       child: Text(
         title!,
-        style: poppins.copyWith(fontSize: 15, fontWeight: FontWeight.w500),
+        style: poppins.copyWith(fontWeight: FontWeight.w500),
       ),
     ).paddingSymmetric(horizontal: 15, vertical: 10),
-  );
-}
-
-/// this widget show the various available features of the app
-/// available to users
-Widget featuresWidget() {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(left: 15),
-        physics: const BouncingScrollPhysics(),
-        child: Row(
-          children: List.generate(
-              featuresWidgetData.length,
-              (index) => textButton(
-                    function: featuresWidgetData[index].function,
-                    title: featuresWidgetData[index].name!,
-                  ).marginOnly(left: 7)),
-        ).paddingSymmetric(vertical: 5),
-      ),
-      const SizedBox(height: 15),
-      Text(
-        'Recent Quiz',
-        style: bolo.copyWith(fontSize: 15, fontWeight: FontWeight.w600),
-      ).paddingOnly(left: 22, bottom: 10, top: 5),
-      ListTile(
-        onTap: () {},
-        tileColor: deepSeaBlueK,
-        leading: Card(
-          shape: const CircleBorder(),
-          color: deepSeaBlueK,
-          elevation: 5,
-          child: Icon(
-            CupertinoIcons.question_circle,
-            size: 35,
-            color: whiteK,
-          ),
-        ),
-        title: Text(
-          'Quiz Name',
-          style: abeezee.copyWith(
-            color: whiteK,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        subtitle: Text(
-          'status: ',
-          style: montserrat.copyWith(
-            color: whiteK,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        trailing: CircularProgressIndicator(
-          backgroundColor: whiteK.withOpacity(.3),
-          valueColor: AlwaysStoppedAnimation<Color>(whiteK),
-          value: .7,
-        ).paddingOnly(right: 5),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 5),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      ).paddingSymmetric(horizontal: 22)
-    ],
   );
 }
 
@@ -233,11 +239,10 @@ Widget dashBoard({
   );
 }
 
-
 /// widget showing all available rooms for quizez.
-SizedBox roomsWidget() {
+Widget discoverQuiz() {
   return SizedBox(
-      height: 190,
+      height: 208,
       width: double.infinity,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -245,73 +250,165 @@ SizedBox roomsWidget() {
         physics: const BouncingScrollPhysics(),
         child: Row(
           children: List.generate(
-            roomwidgetData.length,
-            (index) => Container(
-              height: 160,
-              width: 120,
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                  gradient:
-                      LinearGradient(colors: [lightSeaBlueK, deepSeaBlueK]),
-                  borderRadius: BorderRadius.circular(20)),
-              margin: const EdgeInsets.only(left: 10),
-              child: Stack(
-                children: [
-                  Align(
-                    alignment: const Alignment(-1.0, -0.8),
-                    child: Lottie.asset(
-                      roomwidgetData[index].field!,
-                      repeat: false,
-                    ),
-                  ),
-                  Align(
-                    alignment: const Alignment(0.8, -1.40),
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      decoration: ShapeDecoration(
-                        shape: const CircleBorder(),
-                        color: Get.theme.canvasColor,
-                      ),
-                      child: Text(
-                        '0${(index + 1).toString()}',
-                        style: bolo.copyWith(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.blueGrey,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ListTile(
-                      dense: true, tileColor: whiteK,
-                      // tileColor: const Color(0xff3b8aa9),
-                      contentPadding: const EdgeInsets.all(5),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      title: Text(
-                        'participants: ${roomwidgetData[index].participantsnumber.toString()}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                      subtitle: Text(
-                        roomwidgetData[index].roomname!,
-                        style: montserrat.copyWith(
-                          overflow: TextOverflow.ellipsis,
-                          color: Colors.grey.shade300,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+            quizModelData.getRange(0, 6).length,
+            (index) => Card(
+              elevation: 4,
+              shape: RoundedRectangleBorder(
+                borderRadius: curved,
+              ),
+              child: InkWell(
+                onTap: () {},
+                borderRadius: curved,
+                child: Container(
+                  width: 135,
+                  decoration: BoxDecoration(
+                      color: quizModelData[index].color!.withOpacity(.3),
+                      borderRadius: curved),
+                  child: discoverWidget(index),
+                ),
               ),
             ),
           ),
         ),
       ));
+}
+
+Widget discoverWidget(int index) {
+  return ListTile(
+    dense: true,
+    minVerticalPadding: 0,
+    tileColor: whiteK,
+    shape: RoundedRectangleBorder(
+      side: BorderSide(width: 1, color: greyK.withOpacity(.3)),
+      borderRadius: curved,
+    ),
+    contentPadding: const EdgeInsets.all(0),
+    title: SizedBox(
+      height: 100,
+      child: Center(
+        child: Lottie.asset(
+          quizModelData[index].fieldImage!,
+          repeat: false,
+          fit: BoxFit.fill,
+        ),
+      ),
+    ),
+    subtitle: Container(
+      height: 90,
+      decoration: BoxDecoration(color: whiteK, borderRadius: curved),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            quizModelData[index].quizname!,
+            style: montserrat.copyWith(
+              fontWeight: FontWeight.w600,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const Spacer(flex: 1),
+          Text(
+            quizModelData[index].course!,
+            style: abeezee.copyWith(
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          const Spacer(flex: 2),
+          Row(
+            children: [
+              const CircleAvatar(
+                radius: 10,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                quizModelData[index].authorsname!,
+                overflow: TextOverflow.ellipsis,
+                style: raleway.copyWith(
+                  fontSize: 11,
+                  color: blackK.withOpacity(.8),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ).paddingAll(10),
+    ),
+  );
+}
+
+List trending = [3, 2, 1, 1];
+
+/// this widget show the various available features of the app
+/// available to users
+Widget trendingWidget() {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        'Trending Quiz',
+        style: bolo.copyWith(fontWeight: FontWeight.w600),
+      ).paddingSymmetric(horizontal: 22, vertical: 10),
+      ListTile(
+        onTap: () {},
+        tileColor: deepSeaBlueK,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'quizname',
+              style: poppins.copyWith(
+                color: whiteK,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            Text(
+              'course',
+              style: abeezee.copyWith(
+                fontSize: 12,
+                color: greyK,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ).paddingOnly(bottom: 5),
+          ],
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const CircleAvatar(radius: 12).paddingOnly(right: 10),
+                Text(
+                  'authorsname',
+                  style: abeezee.copyWith(
+                    color: whiteK,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        trailing: Container(
+          decoration: BoxDecoration(
+            borderRadius: curved,
+            color: whiteK,
+          ),
+          width: 50,
+          child: Center(
+            child: Lottie.asset(
+              col,
+              repeat: false,
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        shape: RoundedRectangleBorder(borderRadius: curved),
+      ).paddingSymmetric(horizontal: 22),
+    ],
+  );
 }

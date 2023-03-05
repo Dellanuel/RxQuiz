@@ -243,7 +243,7 @@ class _SettingsPageState extends State<SettingsPage> {
           title: 'Notification',
         ),
         buttonDecoration:
-            BoxDecoration(borderRadius: BorderRadius.circular(20)),
+            BoxDecoration(borderRadius: curved),
       ),
     );
   }

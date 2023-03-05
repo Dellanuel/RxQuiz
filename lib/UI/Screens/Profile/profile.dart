@@ -47,123 +47,134 @@ class _ProfileState extends State<Profile> {
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Align(
-            alignment: Alignment.center,
-            child: CircleAvatar(
-              radius: 50,
-            ),
-          ),
-          ListTile(
-            dense: true,
-            contentPadding: const EdgeInsets.only(left: 8),
-            title: Text(
-              'UserName',
-              style: robotoSlab.copyWith(
-                overflow: TextOverflow.ellipsis,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Align(
+              alignment: Alignment.center,
+              child: CircleAvatar(
+                radius: 50,
               ),
             ),
-            subtitle: Text(
-              'useremail@useremail.com',
-              style: bolo.copyWith(
-                overflow: TextOverflow.ellipsis,
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
+            ListTile(
+              dense: true,
+              contentPadding: const EdgeInsets.only(left: 8),
+              title: Text(
+                'UserName',
+                style: robotoSlab.copyWith(
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
+              subtitle: Text(
+                'useremail@useremail.com',
+                style: bolo.copyWith(
+                  overflow: TextOverflow.ellipsis,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              trailing: elevatedButton(
+                  text: 'Edit profile',
+                  onpressed: () {
+                    Get.to(() => const UserInfo());
+                  }),
             ),
-            trailing: elevatedButton(
-                text: 'Edit profile',
-                onpressed: () {
-                  Get.to(() => const UserInfo());
-                }),
-          ),
-          profileScoreBoard(),
-          Center(
-            child: ToggleButtons(
-              onPressed: (newIndex) {
-                setState(() {
-                  for (int index = 0; index < isselected.length; index++) {
-                    if (index == newIndex) {
-                      isselected[index] = true;
-                      _pageController.animateToPage(index,
-                          curve: Curves.linearToEaseOut,
-                          duration: const Duration(
-                            milliseconds: 600,
-                          ));
-                    } else {
-                      isselected[index] = false;
+            profileScoreBoard(),
+            Text(
+              'Personal Libary',
+              style: bolo.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
+            ).paddingOnly(bottom: 10, left: 8),
+            Center(
+              child: ToggleButtons(
+                onPressed: (newIndex) {
+                  setState(() {
+                    for (int index = 0; index < isselected.length; index++) {
+                      if (index == newIndex) {
+                        isselected[index] = true;
+                        _pageController.animateToPage(index,
+                            curve: Curves.linearToEaseOut,
+                            duration: const Duration(
+                              milliseconds: 600,
+                            ));
+                      } else {
+                        isselected[index] = false;
+                      }
                     }
-                  }
-                });
-              },
-              textStyle: poppins,
-              borderWidth: 2,
-              color: blackK,
-              borderColor: Get.theme.primaryColor,
-              selectedBorderColor: Get.theme.primaryColor,
-              borderRadius: BorderRadius.circular(10),
-              fillColor: Get.theme.primaryColor,
-              selectedColor: whiteK,
-              isSelected: isselected,
-              children: [
-                const Text(
-                  'RxQuiz',
-                ).paddingSymmetric(horizontal: 30),
-                const Text(
-                  'LiveQuiz',
-                ).paddingSymmetric(horizontal: 30),
-              ],
-            ),
-          ).marginOnly(bottom: 10),
-          Expanded(
-            child: PageView(
-              physics: const BouncingScrollPhysics(),
-              controller: _pageController,
-              children: [
-                Material(
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
-                    itemBuilder: (context, index) {
-                      return recentsTile(
-                        lottieImage: roomwidgetData[index].field,
-                        date: 'now',
-                        title: roomwidgetData[index].roomname,
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 15);
-                    },
-                    itemCount: roomwidgetData.length,
+                  });
+                },
+                textStyle: poppins,
+                borderWidth: 2,
+                color: blackK,
+                borderColor: Get.theme.primaryColor,
+                selectedBorderColor: Get.theme.primaryColor,
+                borderRadius: BorderRadius.circular(10),
+                fillColor: Get.theme.primaryColor,
+                selectedColor: whiteK,
+                isSelected: isselected,
+                children: [
+                  const Text(
+                    'Created',
+                  ).paddingSymmetric(horizontal: 30),
+                  const Text(
+                    'History',
+                  ).paddingSymmetric(horizontal: 30),
+                ],
+              ),
+            ).marginOnly(bottom: 15),
+            SizedBox(
+              height: 300,
+              child: PageView(
+                physics: const ClampingScrollPhysics(),
+                controller: _pageController,
+                children: [
+                  Material(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Column(
+                          children: List.generate(
+                        quizModelData.length,
+                        (index) {
+                          return quizTile(
+                            questionNum: '10',
+                            color: quizModelData[index].color,
+                            authorsname: quizModelData[index].authorsname,
+                            course: quizModelData[index].course,
+                            plays: '5',
+                            lottieImage: quizModelData[index].fieldImage,
+                            date: 'now',
+                            title: quizModelData[index].course,
+                          );
+                        },
+                      )),
+                    ),
                   ),
-                ),
-                Material(
-                  child: ListView.separated(
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 15, horizontal: 5),
-                    itemBuilder: (context, index) {
-                      return recentsTile(
-                        lottieImage: roomwidgetData[index].field,
-                        date: 'now',
-                        title: roomwidgetData[index].roomname,
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(height: 15);
-                    },
-                    itemCount: roomwidgetData.length,
+                  Material(
+                    child: Column(
+                        children: List.generate(
+                      quizModelData.length,
+                      (index) {
+                        return quizTile(
+                          questionNum: '10',
+                          color: quizModelData[index].color,
+                          authorsname: quizModelData[index].authorsname,
+                          course: quizModelData[index].course,
+                          plays: '5',
+                          lottieImage: quizModelData[index].fieldImage,
+                          date: 'now',
+                          title: quizModelData[index].course,
+                        );
+                      },
+                    )),
                   ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ).paddingSymmetric(horizontal: 15, vertical: 20),
+                ],
+              ),
+            )
+          ],
+        ).paddingSymmetric(horizontal: 15, vertical: 20),
+      ),
     );
   }
 }
