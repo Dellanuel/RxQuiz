@@ -40,8 +40,8 @@ class _QuizDetailsState extends State<QuizDetails> {
         ],
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        physics: const BouncingScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -62,7 +62,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                 .paddingOnly(top: 15),
             Text(quizModelData[widget.index].course!,
                 style: poppins.copyWith(color: greyK)),
-            Divider(height: 20, endIndent: 5, indent: 5),
+            const Divider(height: 20, endIndent: 5, indent: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -122,17 +122,17 @@ class _QuizDetailsState extends State<QuizDetails> {
                 ),
               ],
             ).paddingSymmetric(horizontal: 5),
-            Divider(height: 20, endIndent: 5, indent: 5),
+            const Divider(height: 20, endIndent: 5, indent: 5),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 20,
                 ).paddingOnly(right: 10),
                 Expanded(
                   child: ListTile(
                     minVerticalPadding: 0,
-                    contentPadding: EdgeInsets.all(0),
+                    contentPadding: const EdgeInsets.all(0),
                     dense: true,
                     title: Text(
                       quizModelData[widget.index].authorsname!,

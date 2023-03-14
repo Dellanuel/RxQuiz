@@ -58,7 +58,6 @@ class _UserInfoState extends State<UserInfo> {
             controller: null,
             hint: null,
             ontap: () async {
-              Get.closeAllSnackbars();
               await Get.closeCurrentSnackbar();
               Get.showSnackbar(const GetSnackBar(
                 // title: 'Error',
@@ -70,14 +69,12 @@ class _UserInfoState extends State<UserInfo> {
               ));
             },
             initialVal: firstname,
-            // 0696675531
             label: 'First Name',
           ),
           textViewField(
             controller: null,
             icon: null,
             ontap: () async {
-              Get.closeAllSnackbars();
               await Get.closeCurrentSnackbar();
               Get.showSnackbar(const GetSnackBar(
                 // title: 'Error',

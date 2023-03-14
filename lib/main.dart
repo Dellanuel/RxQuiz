@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-        
+        tooltipTheme: TooltipThemeData(triggerMode: TooltipTriggerMode.tap),
         iconTheme: IconThemeData(size: 23),
         iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(

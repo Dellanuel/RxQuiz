@@ -18,9 +18,12 @@ final abeezee = GoogleFonts.aBeeZee(fontSize: 13, fontWeight: FontWeight.w400);
 final poppins = GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400);
 
 /// use for appbar textstyles
-final bigBolo = bolo.copyWith(fontSize: 20, fontWeight: FontWeight.w600);
+final bigBolo = bolo.copyWith(fontSize: 20, fontWeight: FontWeight.w600,overflow: TextOverflow.ellipsis);
 
 // button styles
+ButtonStyle floatButton = textButtonStyl.copyWith(
+  shape: const MaterialStatePropertyAll(CircleBorder()),
+);
 ButtonStyle textButtonStyl = ButtonStyle(
     // elevation: const MaterialStatePropertyAll(0),
     backgroundColor: MaterialStatePropertyAll(whiteK),
@@ -37,6 +40,8 @@ ButtonStyle textButtonStyl = ButtonStyle(
 Color greyblueK = Colors.blueGrey;
 Color greyK = Colors.grey.shade500;
 Color whiteK = Colors.white;
+Color greenK = Colors.white;
+Color redK = Colors.white;
 Color blackK = Colors.black;
 Color creamK = const Color(0xfffdfbee);
 Color deepSeaBlueK = const Color(0xff09203F);
