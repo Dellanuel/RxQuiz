@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:pharm_quiz/UI/Screens/Quiz/quiz_create.dart';
 
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
-import 'model.dart';
+import '../../../Functions/datastore_func.dart';
 
 class QuestionAndAnswer extends StatefulWidget {
   const QuestionAndAnswer({super.key});
@@ -21,11 +20,11 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
   bool _isEditing = false;
 
   ///TextEditingControllers for modifiying and adding texts in the Form pile.
-  final _question = TextEditingController();
-  final _correctOption = TextEditingController();
-  final _inCorrectOption_1 = TextEditingController();
-  final _inCorrectOption_2 = TextEditingController();
-  final _inCorrectOption_3 = TextEditingController();
+  String? _question,
+      _correctOption,
+      _inCorrectOption_1,
+      _inCorrectOption_2,
+      _inCorrectOption_3;
 
   ///A Global Key specific to only this Form Page.
   final _questionformKey = GlobalKey<FormState>();
@@ -49,50 +48,31 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
   void _addQuestion() {
     _listQA.add(
       Questions(
-          question: _question.text.capitalizeFirst,
-          correctAnswer: _correctOption.text.capitalizeFirst,
-          incorrectAnswers: [
-            _inCorrectOption_1.text.capitalizeFirst!,
-            _inCorrectOption_2.text.capitalizeFirst!,
-            _inCorrectOption_3.text.capitalizeFirst!,
-          ]),
+        question: _question!.capitalizeFirst,
+        correctAnswer: _correctOption!.capitalizeFirst,
+        incorrectAnswer1: _inCorrectOption_1!.capitalizeFirst!,
+        incorrectAnswer2: _inCorrectOption_2!.capitalizeFirst!,
+        incorrectAnswer3: _inCorrectOption_3!.capitalizeFirst!,
+        isTrueFalse: false,
+      ),
     );
   }
-
-  // ///edits previously entered question values
-  // ///from the Form pile to a newer value.
-  // void _editQuestion() {
-  //   _fillvalue.question = _question.text.capitalizeFirst;
-  //   _fillvalue.correctAnswer = _correctOption.text.capitalizeFirst;
-
-  //   _fillvalue.incorrectAnswers = [
-  //     _inCorrectOption_1.text.capitalizeFirst!,
-  //     _inCorrectOption_2.text.capitalizeFirst!,
-  //     _inCorrectOption_3.text.capitalizeFirst!,
-  //   ];
-  // }
 
   // late Questions _fillvalue;
   void _editQuestion({required index}) {
     // _fillvalue = _listQA[index];
-    _question.text = _listQA[index].question!;
-    _correctOption.text = _listQA[index].correctAnswer!;
-    _inCorrectOption_1.text = _listQA[index].incorrectAnswers!.elementAt(0);
-    _inCorrectOption_2.text = _listQA[index].incorrectAnswers!.elementAt(1);
-    _inCorrectOption_3.text = _listQA[index].incorrectAnswers!.elementAt(2);
+    _question = _listQA[index].question!;
+    _correctOption = _listQA[index].correctAnswer!;
+    _inCorrectOption_1 = _listQA[index].incorrectAnswer1;
+    _inCorrectOption_2 = _listQA[index].incorrectAnswer2;
+    _inCorrectOption_3 = _listQA[index].incorrectAnswer3;
     _isEditing = true;
     Get.back();
     _listQA.remove(_listQA[index]);
     setState(() {});
   }
 
-  void _clearTexts() {
-    _question.clear();
-    _correctOption.clear();
-    _inCorrectOption_1.clear();
-    _inCorrectOption_2.clear();
-    _inCorrectOption_3.clear();
-  }
+  _clear() {}
 
   @override
   void initState() {
@@ -110,13 +90,13 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: appbarBackButton2(action: (){
+        leading: appbarBackButton2(action: () {
           Get.back();
         }),
         actions: [
           appbarButton(
               icon: Icon(
-                Ionicons.save_outline,
+                Icons.save,
                 color: Get.theme.primaryColor,
               ),
               onpressed: () {
@@ -147,13 +127,13 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
                       (index) => showQuestion(index, [
                             appbarButton(
                               icon: const Icon(
-                                Ionicons.pencil_outline,
+                                Icons.edit_document,
                               ),
                               onpressed: () => _editQuestion(index: index),
                             ),
                             appbarButton(
                                 icon: const Icon(
-                                  Ionicons.trash_outline,
+                                  Icons.remove_circle_outline_rounded,
                                   color: Colors.red,
                                 ),
                                 onpressed: () {
@@ -175,17 +155,8 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
                     'Compose your question and options in the spaces provided.',
                     style: abeezee.copyWith(color: greyK),
                   ).paddingOnly(bottom: 15),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 35, vertical: 30),
-                    decoration: BoxDecoration(
-                        borderRadius: curved,
-                        border: Border.all(
-                            width: 1, color: Get.theme.primaryColor)),
-                    child: Center(
-                        child: TextFormField(
-                      autofocus: true,
-                      controller: _question,
+                  textEditField(
+                      initialval: _question,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return '* Required';
@@ -193,14 +164,14 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
                           return null;
                         }
                       },
-                      onChanged: (val) {},
-                      style: poppins.copyWith(overflow: TextOverflow.clip),
-                      maxLines: null,
-                      decoration: const InputDecoration.collapsed(
-                          hintText: 'Tap to add question'),
-                    )),
-                  ).paddingOnly(bottom: 15),
+                      controller: (val) => _question = val,
+                      hint: 'Tap to add question',
+                      label: '',
+                      tF: false,
+                      trailTap: null,
+                      value: null),
                   textEditField(
+                    initialval: _correctOption,
                     value: null,
                     trailTap: null,
                     tF: false,
@@ -211,13 +182,14 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
                         return null;
                       }
                     },
-                    controller: _correctOption,
+                    controller: (_) => _correctOption = _,
                     label: 'Correct Option',
                     hint: 'Enter Correct Option',
                   ),
                   const Divider(
                       endIndent: 10, indent: 10, height: 25, thickness: 0.5),
                   textEditField(
+                    initialval: _inCorrectOption_1,
                     value: null,
                     trailTap: null,
                     tF: false,
@@ -228,11 +200,12 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
                         return null;
                       }
                     },
-                    controller: _inCorrectOption_1,
+                    controller: (_) => _inCorrectOption_1 = _,
                     label: 'Incorrect Options',
                     hint: 'Enter Incorrect Option',
                   ),
                   textEditField(
+                    initialval: _inCorrectOption_2,
                     value: null,
                     trailTap: null,
                     tF: false,
@@ -243,11 +216,12 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
                         return null;
                       }
                     },
-                    controller: _inCorrectOption_2,
+                    controller: (_) => _inCorrectOption_2 = _,
                     label: '',
                     hint: 'Enter Incorrect Option',
                   ),
                   textEditField(
+                    initialval: _inCorrectOption_3,
                     value: null,
                     trailTap: null,
                     tF: false,
@@ -258,7 +232,7 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
                         return null;
                       }
                     },
-                    controller: _inCorrectOption_3,
+                    controller: (_) => _inCorrectOption_3 = _,
                     label: '',
                     hint: 'Enter Incorrect Option',
                   ),
@@ -275,7 +249,6 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
           onPressed: () async {
             if (_isEditing) {
               _addQuestion();
-              _clearTexts();
 
               setState(() {
                 _isEditing = false;
@@ -284,14 +257,13 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
               if (_questionformKey.currentState!.validate()) {
                 await Get.closeCurrentSnackbar();
                 _addQuestion();
-                _clearTexts();
                 setState(() {});
               }
             }
           },
           child: _isEditing
-              ? const Icon(Ionicons.pencil_outline)
-              : const Icon(Ionicons.add)),
+              ? const Icon(Icons.edit_document)
+              : const Icon(Icons.add)),
     );
   }
 
@@ -367,7 +339,7 @@ class _QuestionAndAnswerState extends State<QuestionAndAnswer> {
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                 color: greyK.withOpacity(.1),
                 child: Text(
-                  _listQA[index].incorrectAnswers!.join(","),
+                  '1: ${_listQA[index].incorrectAnswer1}\n2: ${_listQA[index].incorrectAnswer2}\n${_listQA[index].incorrectAnswer3}',
                   style: raleway.copyWith(overflow: TextOverflow.ellipsis),
                 ),
               ),

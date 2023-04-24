@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "42296021208",
+    "firebase_url": "https://quiz-app-nemelu-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "quiz-app-nemelu",
+    "storage_bucket": "quiz-app-nemelu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42296021208:android:9e9cdf8a2d31fa5c5007ad",
+        "android_client_info": {
+          "package_name": "com.nemelu.pharm_quiz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "42296021208-cco3ibrl75l32c9tvid7lrie8o9v0i6f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nemelu.pharm_quiz",
+            "certificate_hash": "6ca877c3267f558bc766d5fbcce58f808a51f112"
+          }
+        },
+        {
+          "client_id": "42296021208-0pcnod7762trcq1kqhn7ue90tb2fncg7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTUffQ01EXaApDaVwvSCnBpfeQYeusTrA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "42296021208-0pcnod7762trcq1kqhn7ue90tb2fncg7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

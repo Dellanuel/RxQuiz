@@ -1,8 +1,13 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharm_quiz/UI/Screens/Intro/intro.dart';
 import 'UI/Screens/Home/home.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -14,11 +19,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: ThemeData(
         useMaterial3: true,
-        tooltipTheme: TooltipThemeData(triggerMode: TooltipTriggerMode.tap),
-        iconTheme: IconThemeData(size: 23),
+        tooltipTheme:
+            const TooltipThemeData(triggerMode: TooltipTriggerMode.tap),
+        iconTheme: const IconThemeData(size: 23),
         iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(
-            iconSize: MaterialStatePropertyAll(22),
+            iconSize: const MaterialStatePropertyAll(22),
             shape: MaterialStateProperty.all(const CircleBorder()),
           ),
         ),

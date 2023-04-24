@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pharm_quiz/utils/app_constants.dart';
 /// button used for app functions
-Widget elevatedButton({required text, required onpressed}) {
+Widget elevatedButton({required String text, required onpressed}) {
   return ElevatedButton(
       style: textButtonStyl,
       onPressed: onpressed,
@@ -19,12 +18,10 @@ Widget elevatedButton({required text, required onpressed}) {
 
 /// recents tile
 Widget quizTile({
-  required Color? color,
-  required lottieImage,
-  required title,
-  required questionNum,
-  required authorsname,
-  required course,
+  required String img,
+  required String title,
+  required String authorsname,
+  required String course,
   required date,
   required plays,
 }) {
@@ -33,7 +30,6 @@ Widget quizTile({
     dense: true,
     minVerticalPadding: 0,
     minLeadingWidth: 70,
-    tileColor: color!.withOpacity(.3),
     shape: RoundedRectangleBorder(
       side: BorderSide(width: 1, color: greyK.withOpacity(.5)),
       borderRadius: curved,
@@ -43,9 +39,8 @@ Widget quizTile({
       height: 70,
       width: 70,
       child: Center(
-        child: Lottie.asset(
-          lottieImage,
-          repeat: false,
+        child: Image.asset(
+          img,
           fit: BoxFit.fill,
           height: 100,
         ),
@@ -70,7 +65,7 @@ Widget quizTile({
           ),
           const Spacer(flex: 1),
           Text(
-            '$course.Q$questionNum',
+            course,
             style: abeezee.copyWith(
               overflow: TextOverflow.ellipsis,
             ),
@@ -227,7 +222,7 @@ Widget settingsTile(trailing,
             shape: const CircleBorder(), color: color!.withOpacity(.1)),
         child: Icon(icon, color: color)),
     title: Text(title, style: poppins),
-    trailing: trailing ?? const Icon(Ionicons.chevron_forward),
+    trailing: trailing ?? const Icon(Icons.chevron_left),
   );
 }
 

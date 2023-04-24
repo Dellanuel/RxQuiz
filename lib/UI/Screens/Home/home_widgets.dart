@@ -3,15 +3,15 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:pharm_quiz/UI/Screens/Quiz/quiz_create.dart';
 import 'package:pharm_quiz/UI/Screens/Quiz/quiz_details.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:lottie/lottie.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
-import '../../../utils/dummy_data.dart';
+import '../../../Functions/user_func.dart';
 import '../../strings.dart';
+import '../../../Functions/datastore_func.dart';
 
 /// features widget data
 class FeaturesWidgetData {
@@ -44,10 +44,6 @@ List<FeaturesWidgetData> featuresWidgetData = [
     name: 'Scoreboard',
     function: () {},
   ),
-  FeaturesWidgetData(
-    name: 'Practice',
-    function: () {},
-  )
 ];
 
 /// Room widget data
@@ -81,7 +77,6 @@ Widget dashBoard({
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        appLogo(),
         Align(
           alignment: Alignment.centerLeft,
           child: Column(
@@ -115,7 +110,7 @@ Widget dashBoard({
 }
 
 /// widget showing all available rooms for quizez.
-Widget discoverQuiz() {
+Widget discoverQuiz({required int dataLength, required List<QuizModel> data}) {
   return SizedBox(
       height: 208,
       width: double.infinity,
@@ -125,24 +120,15 @@ Widget discoverQuiz() {
         physics: const BouncingScrollPhysics(),
         child: Row(
           children: List.generate(
-            quizModelData.getRange(0, 6).length,
-            (index) => Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: curved,
-              ),
-              child: InkWell(
-                onTap: () {
-                  Get.to(() => QuizDetails(index: index));
-                },
-                borderRadius: curved,
-                child: Container(
-                  width: 135,
-                  decoration: BoxDecoration(
-                      color: quizModelData[index].color!.withOpacity(.3),
-                      borderRadius: curved),
-                  child: discoverWidget(index),
-                ),
+            dataLength,
+            (index) => GestureDetector(
+              onTap: () {
+                Get.to(() => QuizDetails(index: index,data: data));
+              },
+              child: Container(
+                width: 135,
+                decoration: BoxDecoration(borderRadius: curved),
+                child: discoverWidget(index: index, data: data),
               ),
             ),
           ),
@@ -150,24 +136,15 @@ Widget discoverQuiz() {
       ));
 }
 
-Widget discoverWidget(int index) {
+Widget discoverWidget({required int index, required List<QuizModel> data}) {
   return ListTile(
     dense: true,
     minVerticalPadding: 0,
-    tileColor: whiteK,
-    shape: RoundedRectangleBorder(
-      side: BorderSide(width: 1, color: greyK.withOpacity(.3)),
-      borderRadius: curved,
-    ),
     contentPadding: const EdgeInsets.all(0),
     title: SizedBox(
       height: 100,
       child: Center(
-        child: Lottie.asset(
-          quizModelData[index].fieldImage!,
-          repeat: false,
-          fit: BoxFit.fill,
-        ),
+        child: Image.asset(data[index].fieldImage ?? 'assets/image/ico_1.png'),
       ),
     ),
     subtitle: Container(
@@ -178,15 +155,16 @@ Widget discoverWidget(int index) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            quizModelData[index].quizname!,
+            data[index].name!,
             style: montserrat.copyWith(
+              fontSize: 14,
               fontWeight: FontWeight.w600,
               overflow: TextOverflow.ellipsis,
             ),
           ),
           const Spacer(flex: 1),
           Text(
-            quizModelData[index].course!,
+            data[index].course!,
             style: abeezee.copyWith(
               overflow: TextOverflow.ellipsis,
             ),
@@ -199,7 +177,7 @@ Widget discoverWidget(int index) {
               ),
               const SizedBox(width: 5),
               Text(
-                quizModelData[index].authorsname!,
+                data[index].authorsname!,
                 overflow: TextOverflow.ellipsis,
                 style: raleway.copyWith(
                   fontSize: 11,
@@ -214,8 +192,6 @@ Widget discoverWidget(int index) {
     ),
   );
 }
-
-List trending = [3, 2, 1, 1];
 
 /// this widget show the various available features of the app
 /// available to users
@@ -274,13 +250,12 @@ Widget trendingWidget() {
             color: whiteK,
           ),
           width: 50,
-          child: Center(
-            child: Lottie.asset(
-              colLottie,
-              repeat: false,
-              fit: BoxFit.fill,
-            ),
-          ),
+          child: const Center(
+              // child: Image.asset(
+              //   '',
+              //   fit: BoxFit.fill,
+              // ),
+              ),
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

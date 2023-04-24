@@ -33,31 +33,24 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   firebase_core:
+  firebase_storage:
+  firebase_auth:
+  google_sign_in:
+  cloud_firestore:
+  firebase_ui_auth:
   syncfusion_flutter_charts:
-  ionicons:  
-  flutter_chat_ui: 
-  flutter_chat_types: 
-  # jiffy: 
   rounded_loading_button:
   get:
   font_awesome_flutter:
   flutter_svg: 
   google_fonts: 
   lottie: 
-  flutter_rating_bar: 
-  firebase_auth:
-  cloud_firestore:
-  google_sign_in:
   hive:
   shared_preferences:
   shimmer:
   image_picker:
   dropdown_button2:
-  firebase_storage:
-  csc_picker:
-  money_formatter:
   agora_rtm:
-  chatview: ^1.1.0
   onesignal_flutter: ^3.5.0
   uuid: ^3.0.7
   flutter_datetime_picker:

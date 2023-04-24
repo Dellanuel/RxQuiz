@@ -1,6 +1,7 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
 
 import '../UI/strings.dart';
@@ -12,7 +13,7 @@ Widget appbarButton(
   return IconButton(
     splashRadius: 25,
     style: ButtonStyle(
-      padding: MaterialStatePropertyAll(EdgeInsets.all(5)),
+      padding: const MaterialStatePropertyAll(EdgeInsets.all(5)),
       shape: MaterialStateProperty.all(const CircleBorder()),
     ),
     icon: icon,
@@ -26,7 +27,7 @@ Widget appbarBackButton() {
     style: ButtonStyle(
       shape: MaterialStateProperty.all(const CircleBorder()),
     ),
-    icon: const Icon(Ionicons.chevron_back),
+    icon: const Icon(Icons.chevron_left),
     onPressed: () {
       Get.back();
     },
@@ -39,7 +40,7 @@ Widget appbarBackButton2({required void Function()? action}) {
     style: ButtonStyle(
       shape: MaterialStateProperty.all(const CircleBorder()),
     ),
-    icon: const Icon(Ionicons.close),
+    icon: const Icon(Icons.close),
     onPressed: action,
   );
 }
@@ -83,52 +84,6 @@ Widget searchbar(
   );
 }
 
-///app logo
-Widget appLogo() {
-  return Container(
-    height: 60,
-    width: 80,
-    margin: const EdgeInsets.all(0),
-    padding: const EdgeInsets.all(5),
-    decoration: ShapeDecoration(
-      shape: CircleBorder(side: BorderSide(width: 2, color: whiteK)),
-      color: lightSeaBlueK,
-    ),
-    child: Stack(
-      children: [
-        Center(
-          child: Lottie.asset(
-            'assets/Lottie/question.json',
-            repeat: false,
-            height: 50,
-            width: 50,
-          ),
-        ),
-        Align(
-          alignment: const Alignment(1.5, 1.5),
-          child: Lottie.asset(
-            'assets/Lottie/bulb.json',
-            repeat: true,
-            height: 30,
-            width: 30,
-          ),
-        ),
-        Align(
-          alignment: const Alignment(0.0, 4),
-          child: Text(
-            appname,
-            style: bolo.copyWith(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: deepSeaBlueK.withOpacity(0.7),
-            ),
-          ),
-        ),
-      ],
-    ),
-  ).paddingAll(5);
-}
-
 Widget textViewField({
   required icon,
   required ontap,
@@ -164,11 +119,12 @@ Widget textViewField({
 /// Textformfield that allows for editing of texts...
 /// ...or different variable constants.
 Widget textEditField({
-  required controller,
+  required void Function(String)? controller,
   required String label,
   required hint,
   required validator,
   required tF,
+  required initialval,
   required void Function(bool?)? trailTap,
   required bool? value,
 }) {
@@ -181,9 +137,8 @@ Widget textEditField({
           : Text(
               label,
               style: bolo.copyWith(fontWeight: FontWeight.w600),
-            ).paddingOnly(bottom: 10),
+            ).paddingOnly(bottom: 7),
       Container(
-        padding: const EdgeInsets.symmetric(horizontal: 35, vertical: 20),
         decoration: BoxDecoration(
             borderRadius: curved,
             border: Border.all(width: 1, color: Get.theme.primaryColor)),
@@ -191,23 +146,26 @@ Widget textEditField({
           children: [
             Expanded(
               flex: 2,
-              child: TextFormField(
-                autofocus: true,
-                maxLines: null,
+              child: CupertinoTextFormFieldRow(
+                placeholder: hint,
+                maxLines: 2,
+                minLines: 1,
+                initialValue: initialval,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                style: poppins.copyWith(
+                    color: !Get.isDarkMode ? null : Colors.white),
+                textInputAction: TextInputAction.next,
                 validator: validator,
-                style: poppins.copyWith(fontSize: 14),
-                controller: controller,
-                decoration: InputDecoration.collapsed(
-                  hintText: hint,
-                ),
+                onChanged: controller,
               ),
             ),
             tF
                 ? Checkbox(
                     side: BorderSide(color: Get.theme.primaryColor),
                     value: value,
-                    splashRadius: 20,
+                    splashRadius: 15,
                     onChanged: trailTap,
+                    shape: const CircleBorder(),
                   )
                 : Container()
           ],
@@ -215,4 +173,81 @@ Widget textEditField({
       ),
     ],
   ).paddingOnly(bottom: tF ? 0 : 15);
+}
+
+Widget dropDownButton({
+  required BuildContext context,
+  required String hintText,
+  required List<String> items,
+  required String? selectedValue,
+  required onChanged,
+  required textEditingController,
+}) {
+  return Container(
+    decoration: BoxDecoration(
+        borderRadius: curved,
+        border: Border.all(width: 1, color: Get.theme.primaryColor)),
+    child: CupertinoFormRow(
+      child: DropdownButton2(
+        isExpanded: true, searchInnerWidgetHeight: 70,
+        style: raleway.copyWith(fontSize: 16, color: blackK),
+        hint: Text(
+          hintText,
+          style: bolo.copyWith(fontSize: 16, color: greyK),
+        ),
+        items: items
+            .map((item) => DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(
+                    item,
+                    style: const TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                ))
+            .toList(),
+        value: selectedValue,
+        isDense: true, icon: Container(),
+        underline: Container(),
+        onChanged: onChanged,
+        buttonHeight: 50,
+        buttonWidth: double.infinity,
+        itemHeight: 50,
+        dropdownMaxHeight: 600,
+        searchController: textEditingController,
+        searchInnerWidget: Padding(
+          padding: const EdgeInsets.only(
+            top: 8,
+            bottom: 4,
+            right: 8,
+            left: 8,
+          ),
+          child: TextFormField(
+            controller: textEditingController,
+            decoration: InputDecoration(
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 8,
+              ),
+              hintText: 'Search for a course...',
+              hintStyle: const TextStyle(fontSize: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+        ),
+        searchMatchFn: (item, searchValue) {
+          return (item.value.toString().contains(searchValue));
+        },
+        //This to clear the search value when you close the menu
+        onMenuStateChange: (isOpen) {
+          if (!isOpen) {
+            textEditingController.clear();
+          }
+        },
+      ),
+    ),
+  );
 }

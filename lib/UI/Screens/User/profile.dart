@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:pharm_quiz/UI/Screens/Home/home_widgets.dart';
-import 'package:pharm_quiz/UI/Screens/Profile/settings.dart';
-import 'package:pharm_quiz/UI/Screens/Profile/statistics.dart';
-import 'package:pharm_quiz/UI/Screens/Profile/user_info.dart';
+import 'package:pharm_quiz/UI/Screens/User/settings.dart';
+import 'package:pharm_quiz/UI/Screens/User/statistics.dart';
+import 'package:pharm_quiz/UI/Screens/User/user_info.dart';
 import 'package:pharm_quiz/utils/app_constants.dart';
 import 'package:pharm_quiz/utils/app_widgets.dart';
-import '../../../utils/dummy_data.dart';
+import 'package:pharm_quiz/Functions/user_func.dart';
+import '../../../Functions/datastore_func.dart';
 import 'widgets.dart';
 
 class Profile extends StatefulWidget {
@@ -37,13 +36,13 @@ class _ProfileState extends State<Profile> {
             onpressed: () {
               Get.to(() => const Statistics());
             },
-            icon: const Icon(Ionicons.stats_chart_outline),
+            icon: const Icon(Icons.bar_chart_rounded),
           ),
           appbarButton(
             onpressed: () {
               Get.to(() => const SettingsPage());
             },
-            icon: const Icon(Ionicons.settings_outline),
+            icon: const Icon(Icons.settings),
           ),
         ],
       ),
@@ -144,69 +143,71 @@ class _ProfileState extends State<Profile> {
               physics: const ClampingScrollPhysics(),
               controller: _pageController,
               children: [
-                Material(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                        children: List.generate(
-                      quizModelData.length,
-                      (index) {
-                        return quizTile(
-                          questionNum: quizModelData[index].questionnumber,
-                          color: quizModelData[index].color,
-                          authorsname: quizModelData[index].authorsname,
-                          course: quizModelData[index].course,
-                          plays: quizModelData[index].playsNum,
-                          lottieImage: quizModelData[index].fieldImage,
-                          date: quizModelData[index].date,
-                          title: quizModelData[index].course,
-                        );
-                      },
-                    )),
-                  ),
-                ),
-                Material(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                        children: List.generate(
-                      quizModelData.length,
-                      (index) {
-                        return quizTile(
-                          questionNum: quizModelData[index].questionnumber,
-                          color: quizModelData[index].color,
-                          authorsname: quizModelData[index].authorsname,
-                          course: quizModelData[index].course,
-                          plays: quizModelData[index].playsNum,
-                          lottieImage: quizModelData[index].fieldImage,
-                          date: quizModelData[index].date,
-                          title: quizModelData[index].course,
-                        );
-                      },
-                    )),
-                  ),
-                ),
-                Material(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                        children: List.generate(
-                      quizModelData.length,
-                      (index) {
-                        return quizTile(
-                          questionNum: quizModelData[index].questionnumber,
-                          color: quizModelData[index].color,
-                          authorsname: quizModelData[index].authorsname,
-                          course: quizModelData[index].course,
-                          plays: quizModelData[index].playsNum,
-                          lottieImage: quizModelData[index].fieldImage,
-                          date: quizModelData[index].date,
-                          title: quizModelData[index].course,
-                        );
-                      },
-                    )),
-                  ),
-                ),
+                Container(),
+                Container(),
+                Container(),
+                // Material(
+                //   child: SingleChildScrollView(
+                //     physics: const BouncingScrollPhysics(),
+                //     child: FutureBuilder(
+                //       future: ,
+                //      builder:  (context,index) {
+                //        return Column(
+                //           children: List.generate(
+                //         quizModelData.length,
+                //         (index) {
+                //           return quizTile(
+                //             authorsname: quizModelData[index].authorsname!,
+                //             course: quizModelData[index].course!,
+                //             plays: quizModelData[index].plays,
+                //             img: quizModelData[index].fieldImage!,
+                //             date: quizModelData[index].dateModified,
+                //             title: quizModelData[index].course!,
+                //           );
+                //         },
+                //       ));
+                //      },
+                //     ),
+                //   ),
+                // ),
+                // Material(
+                //   child: SingleChildScrollView(
+                //     physics: const BouncingScrollPhysics(),
+                //     child: Column(
+                //         children: List.generate(
+                //       quizModelData.length,
+                //       (index) {
+                //         return quizTile(
+                //           authorsname: quizModelData[index].authorsname!,
+                //           course: quizModelData[index].course!,
+                //           plays: quizModelData[index].plays,
+                //           img: quizModelData[index].fieldImage!,
+                //           date: quizModelData[index].dateModified,
+                //           title: quizModelData[index].course!,
+                //         );
+                //       },
+                //     )),
+                //   ),
+                // ),
+                // Material(
+                //   child: SingleChildScrollView(
+                //     physics: const BouncingScrollPhysics(),
+                //     child: Column(
+                //         children: List.generate(
+                //       quizModelData.length,
+                //       (index) {
+                //         return quizTile(
+                //           authorsname: quizModelData[index].authorsname!,
+                //           course: quizModelData[index].course!,
+                //           plays: quizModelData[index].plays,
+                //           img: quizModelData[index].fieldImage!,
+                //           date: quizModelData[index].dateModified,
+                //           title: quizModelData[index].course!,
+                //         );
+                //       },
+                //     )),
+                //   ),
+                // ),
               ],
             ).paddingSymmetric(horizontal: 20, vertical: 20),
           ),

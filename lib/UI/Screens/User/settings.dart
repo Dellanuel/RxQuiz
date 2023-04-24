@@ -2,7 +2,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
@@ -57,19 +56,18 @@ class _SettingsPageState extends State<SettingsPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         children: [
-          Center(child: appLogo()).paddingOnly(bottom: 30),
           settingsTile(
             null,
             ontap: () {
               Get.to(() => const UserInfo());
             },
             color: Colors.orange,
-            icon: Ionicons.person_outline,
+            icon: Icons.person_outline,
             title: 'Personal Info',
           ).paddingOnly(bottom: 10),
           notificationButton().paddingOnly(bottom: 10),
           settingsTile(
-              icon: Ionicons.moon_outline,
+              icon: Icons.dark_mode,
               title: 'Dark Mode',
               color: Colors.blue[900],
               ontap: null,
@@ -90,7 +88,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   children: [
                     helpCenterTile(
                       null,
-                      icon: Ionicons.call_outline,
+                      icon: Icons.call,
                       title: 'Customer Service',
                       ontap: () {
                         launchUrl(telLaunchUri);
@@ -98,7 +96,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     helpCenterTile(
                       null,
-                      icon: Ionicons.chatbubble_ellipses_outline,
+                      icon: Icons.chat,
                       title: 'Send an sms',
                       ontap: () {
                         launchUrl(smsLaunchUri);
@@ -106,13 +104,13 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     helpCenterTile(
                       null,
-                      icon: Ionicons.logo_whatsapp,
+                      icon: Icons.wechat,
                       title: 'WhatsApp',
                       ontap: () {},
                     ),
                     helpCenterTile(
                       null,
-                      icon: Ionicons.mail_outline,
+                      icon: Icons.mail_outline,
                       title: 'Email',
                       ontap: () {
                         launchUrl(Uri(
@@ -129,14 +127,14 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
             color: Colors.purple,
-            icon: Ionicons.file_tray,
+            icon: Icons.help,
             title: 'Help Center',
           ).paddingOnly(bottom: 10),
           settingsTile(
             null,
             ontap: () {},
             color: Colors.green,
-            icon: Ionicons.information_outline,
+            icon: Icons.info_sharp,
             title: 'About',
           ).paddingOnly(bottom: 10),
           settingsTile(
@@ -168,7 +166,7 @@ class _SettingsPageState extends State<SettingsPage> {
               );
             },
             color: Colors.red,
-            icon: Ionicons.information_outline,
+            icon: Icons.logout_rounded,
             title: 'Logout',
           ).paddingOnly(bottom: 10),
         ],
@@ -212,10 +210,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       children: [
                         isSelected
                             ? const Icon(
-                                Ionicons.radio_button_off_outline,
+                                Icons.radio_button_off_rounded,
                               )
                             : Icon(
-                                Ionicons.radio_button_on_outline,
+                                Icons.radio_button_checked_rounded,
                                 color: Get.theme.primaryColor,
                               ),
                         const SizedBox(width: 16),
@@ -239,7 +237,7 @@ class _SettingsPageState extends State<SettingsPage> {
           null,
           ontap: null,
           color: Colors.pink,
-          icon: Ionicons.notifications_outline,
+          icon: Icons.notifications,
           title: 'Notification',
         ),
         buttonDecoration:

@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pharm_quiz/UI/Screens/Profile/widgets.dart';
+import 'package:pharm_quiz/UI/Screens/Quiz/play_quiz.dart';
 
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
-import '../../../utils/dummy_data.dart';
+import '../../../Functions/user_func.dart';
 import '../../strings.dart';
-import '../Home/home_widgets.dart';
+import '../../../Functions/datastore_func.dart';
 
 class QuizDetails extends StatefulWidget {
-  const QuizDetails({super.key, required this.index});
+  const QuizDetails({super.key, required this.index, required this.data});
   final int index;
+  final data;
   @override
   State<QuizDetails> createState() => _QuizDetailsState();
 }
@@ -49,18 +49,34 @@ class _QuizDetailsState extends State<QuizDetails> {
             Container(
               height: 200,
               decoration: BoxDecoration(
-                color: quizModelData[widget.index].color!.withOpacity(.3),
                 // color: Colors.grey[300],
                 borderRadius: curved,
               ),
               child: Center(
-                child: Lottie.asset(quizModelData[widget.index].fieldImage!,
-                    fit: BoxFit.fill, height: 150),
+                child: Image.asset(
+                    widget.data[widget.index].fieldImage ??
+                        'assets/image/ico_1.png',
+                    fit: BoxFit.fill,
+                    height: 150),
               ),
             ),
-            Text(quizModelData[widget.index].quizname!, style: bigBolo)
-                .paddingOnly(top: 15),
-            Text(quizModelData[widget.index].course!,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(widget.data[widget.index].name!, style: bigBolo)
+                      .paddingOnly(top: 15),
+                ),
+                Text(
+                  widget.data[widget.index].dateModified!
+                      .toDate()
+                      .millisecondsSinceEpoch
+                      .toString(),
+                  style: abeezee.copyWith(color: greyK),
+                ).paddingOnly(top: 15),
+              ],
+            ),
+            Text(widget.data[widget.index].course!,
                 style: poppins.copyWith(color: greyK)),
             const Divider(height: 20, endIndent: 5, indent: 5),
             Row(
@@ -73,7 +89,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        quizModelData[widget.index].questionnumber!,
+                        '122',
                         style: poppins,
                       ),
                       Text(
@@ -91,7 +107,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        quizModelData[widget.index].playsNum!,
+                        widget.data[widget.index].plays.toString(),
                         style: poppins,
                       ),
                       Text(
@@ -109,7 +125,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        quizModelData[widget.index].favourited!,
+                        widget.data[widget.index].favorited.toString(),
                         style: poppins,
                       ),
                       Text(
@@ -135,7 +151,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                     contentPadding: const EdgeInsets.all(0),
                     dense: true,
                     title: Text(
-                      quizModelData[widget.index].authorsname!,
+                      widget.data[widget.index].authorsname!,
                       style: robotoSlab.copyWith(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 16,
@@ -143,7 +159,7 @@ class _QuizDetailsState extends State<QuizDetails> {
                       ),
                     ),
                     subtitle: Text(
-                      quizModelData[widget.index].authorsemail!,
+                      widget.data[widget.index].authorsemail!,
                       style: bolo.copyWith(
                         color: greyK,
                         overflow: TextOverflow.ellipsis,
@@ -160,22 +176,25 @@ class _QuizDetailsState extends State<QuizDetails> {
               style: bolo.copyWith(fontWeight: FontWeight.w600, fontSize: 15),
             ).paddingOnly(top: 15),
             Text(
-              quizModelData[widget.index].description!,
+              widget.data[widget.index].description!,
               style: abeezee,
             ).paddingOnly(top: 8),
           ],
         ),
       ),
       floatingActionButton: ElevatedButton(
-          style: textButtonStyl,
-          onPressed: () {},
-          child: Text(
-            'Let\'s begin',
-            style: poppins.copyWith(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ).paddingSymmetric(horizontal: 20, vertical: 15)),
+        style: textButtonStyl,
+        onPressed: () {
+          Get.to(() => PlayQuiz(index: widget.index));
+        },
+        child: Text(
+          'Let\'s begin',
+          style: poppins.copyWith(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+        ).paddingSymmetric(horizontal: 20, vertical: 15),
+      ),
     );
   }
 }

@@ -3,7 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  emoji_picker_flutter
+  desktop_webview_auth
   url_launcher_windows
 )
 

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:pharm_quiz/UI/Screens/Quiz/quiz_create.dart';
 
 import '../../../utils/app_constants.dart';
-import 'model.dart';
+import '../../../Functions/datastore_func.dart';
 import 'quiz_questions.dart';
 import 'quiz_trueorfalse.dart';
 

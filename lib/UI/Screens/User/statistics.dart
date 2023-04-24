@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
-import 'package:pharm_quiz/UI/Screens/Profile/widgets.dart';
+import 'package:pharm_quiz/UI/Screens/User/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
-import '../../../utils/dummy_data.dart';
+import '../../../Functions/user_func.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({super.key});
@@ -150,7 +149,7 @@ class _StatisticsState extends State<Statistics> {
                     child: achievementTile(
                         subtitle: 'Quiz passed',
                         leading: const Icon(
-                          Ionicons.thumbs_up_outline,
+                          Icons.thumb_up_alt_sharp,
                           color: Colors.orange,
                         ),
                         title: '10')),
@@ -159,7 +158,7 @@ class _StatisticsState extends State<Statistics> {
                     child: achievementTile(
                         subtitle: 'Fastest record',
                         leading: const Icon(
-                          Ionicons.speedometer,
+                          Icons.speed_rounded,
                           color: Colors.red,
                         ),
                         title: '10'))
@@ -171,7 +170,7 @@ class _StatisticsState extends State<Statistics> {
                     child: achievementTile(
                         subtitle: 'Challenges completed',
                         leading: const Icon(
-                          Ionicons.shield_checkmark_sharp,
+                          Icons.dangerous_rounded,
                           color: Colors.blueAccent,
                         ),
                         title: '10')),

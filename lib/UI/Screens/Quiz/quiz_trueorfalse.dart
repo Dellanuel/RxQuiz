@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
-import 'model.dart';
+import '../../../Functions/datastore_func.dart';
 import 'quiz_create.dart';
 
 class TrueOrFalse extends StatefulWidget {
@@ -30,23 +29,23 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
   bool _answer4 = false;
 
   ///TextEditingControllers for modifiying and adding texts in the Form pile.
-  final _question = TextEditingController();
-  final _option1 = TextEditingController();
-  final _option2 = TextEditingController();
-  final _option3 = TextEditingController();
-  final _option4 = TextEditingController();
+  String? _question, _option1, _option2, _option3, _option4;
 
   ///CRUDE functions
   _addTF() {
     _listTF.add(
-      Questions(question: _question.text.capitalizeFirst, tFOptions: [
-        {
-          _option1.text: _answer1,
-          _option2.text: _answer2,
-          _option3.text: _answer3,
-          _option4.text: _answer4,
-        }
-      ]),
+      Questions(
+        question: _question!.capitalizeFirst,
+        isTrueFalse: true,
+        tFAns1: _answer1,
+        tFAns2: _answer2,
+        tFAns3: _answer3,
+        tFAns4: _answer4,
+        tFOption1: _option1,
+        tFOption2: _option2,
+        tFOption3: _option3,
+        tFOption4: _option4,
+      ),
     );
   }
 
@@ -68,19 +67,15 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
   // late Questions _fillPQ;
   void _editTF({required index}) {
     // _fillPQ = _listTF[index];
-    _question.text = _listTF[index].question!;
-    _option1.text = _listTF[index].tFOptions!.elementAt(0).keys.elementAt(0);
-    _option2.text = _listTF[index].tFOptions!.elementAt(0).keys.elementAt(1);
-    _option3.text = _listTF[index].tFOptions!.elementAt(0).keys.elementAt(2);
-    _option4.text = _listTF[index].tFOptions!.elementAt(0).keys.elementAt(3);
-    _answer1 =
-        _listTF[index].tFOptions!.elementAt(0).values.elementAt(0) as bool;
-    _answer2 =
-        _listTF[index].tFOptions!.elementAt(0).values.elementAt(1) as bool;
-    _answer3 =
-        _listTF[index].tFOptions!.elementAt(0).values.elementAt(2) as bool;
-    _answer4 =
-        _listTF[index].tFOptions!.elementAt(0).values.elementAt(3) as bool;
+    _question = _listTF[index].question!;
+    _option1 = _listTF[index].tFOption1;
+    _option2 = _listTF[index].tFOption2;
+    _option3 = _listTF[index].tFOption3;
+    _option4 = _listTF[index].tFOption4;
+    _answer1 = _listTF[index].tFAns1!;
+    _answer2 = _listTF[index].tFAns2!;
+    _answer3 = _listTF[index].tFAns3!;
+    _answer4 = _listTF[index].tFAns4!;
     _listTF.remove(_listTF[index]);
     _isEditing = true;
     Get.back();
@@ -88,11 +83,11 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
   }
 
   void _clearTexts() {
-    _question.clear();
-    _option1.clear();
-    _option2.clear();
-    _option3.clear();
-    _option4.clear();
+    _question;
+    _option1;
+    _option2;
+    _option3;
+    _option4;
     _answer1 = false;
     _answer2 = false;
     _answer3 = false;
@@ -121,7 +116,7 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
         actions: [
           appbarButton(
               icon: Icon(
-                Ionicons.save_outline,
+                Icons.save,
                 color: Get.theme.primaryColor,
               ),
               onpressed: () {
@@ -154,14 +149,14 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                             [
                               appbarButton(
                                   icon: const Icon(
-                                    Ionicons.pencil_outline,
+                                    Icons.edit_document,
                                   ),
                                   onpressed: () {
                                     _editTF(index: index);
                                   }),
                               appbarButton(
                                   icon: const Icon(
-                                    Ionicons.trash_outline,
+                                    Icons.remove_circle_outline_rounded,
                                     color: Colors.red,
                                   ),
                                   onpressed: () {
@@ -184,32 +179,24 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                     'Compose your question and options in the spaces provided. Also state if option is true or false as this will be this basis for answering questions.',
                     style: abeezee.copyWith(color: greyK),
                   ).paddingOnly(bottom: 15),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 35, vertical: 30),
-                    decoration: BoxDecoration(
-                        borderRadius: curved,
-                        border: Border.all(
-                            width: 1, color: Get.theme.primaryColor)),
-                    child: Center(
-                        child: TextFormField(
-                      autofocus: true,
-                      controller: _question,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return '* Required';
-                        } else {
-                          return null;
-                        }
-                      },
-                      onChanged: (val) {},
-                      style: poppins.copyWith(overflow: TextOverflow.clip),
-                      maxLines: null,
-                      decoration: const InputDecoration.collapsed(
-                          hintText: 'Tap to add question'),
-                    )),
+                  textEditField(
+                    hint: 'Tap to add question',
+                    initialval: _question,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '* Required';
+                      } else {
+                        return null;
+                      }
+                    },
+                    label: '',
+                    tF: false,
+                    trailTap: null,
+                    value: null,
+                    controller: (_) => _question = _,
                   ).paddingOnly(bottom: 15),
                   textEditField(
+                    initialval: _option1,
                     value: _answer1,
                     trailTap: (newBool) {
                       setState(() {
@@ -224,7 +211,7 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                         return null;
                       }
                     },
-                    controller: _option1,
+                    controller: (_) => _option1 = _,
                     label: 'Options',
                     hint: 'Enter Option',
                   ),
@@ -234,6 +221,7 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                       .paddingOnly(left: 10, top: 5),
                   const Divider(height: 20),
                   textEditField(
+                    initialval: _option2,
                     value: _answer2,
                     trailTap: (newBool) {
                       setState(() {
@@ -248,7 +236,7 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                         return null;
                       }
                     },
-                    controller: _option2,
+                    controller: (_) => _option2 = _,
                     label: '',
                     hint: 'Enter Option',
                   ),
@@ -258,6 +246,7 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                       .paddingOnly(left: 10, top: 5),
                   const Divider(height: 20),
                   textEditField(
+                    initialval: _option3,
                     value: _answer3,
                     trailTap: (newBool) {
                       setState(() {
@@ -272,7 +261,7 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                         return null;
                       }
                     },
-                    controller: _option3,
+                    controller: (_) => _option3 = _,
                     label: '',
                     hint: 'Enter Option',
                   ),
@@ -282,6 +271,7 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                       .paddingOnly(left: 10, top: 5),
                   const Divider(height: 20),
                   textEditField(
+                    initialval: _option4,
                     value: _answer4,
                     trailTap: (newBool) {
                       setState(() {
@@ -296,7 +286,7 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                         return null;
                       }
                     },
-                    controller: _option4,
+                    controller: (_) => _option4 = _,
                     label: '',
                     hint: 'Enter Option',
                   ),
@@ -332,8 +322,8 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
             }
           },
           child: _isEditing
-              ? const Icon(Ionicons.pencil_outline)
-              : const Icon(Ionicons.add)),
+              ? const Icon(Icons.edit_document)
+              : const Icon(Icons.add)),
     );
   }
 
@@ -374,7 +364,6 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
         ),
       ),
       onTap: () {
-        final options = _listTF[index].tFOptions!;
         Get.dialog(
           AlertDialog(
             actions: actions,
@@ -393,22 +382,50 @@ class _TrueOrFalseState extends State<TrueOrFalse> {
                     style: raleway,
                   ),
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: List.generate(
-                      options[0].keys.length,
-                      (index) => Container(
-                        width: Get.width,
-                        margin: const EdgeInsets.symmetric(vertical: 5),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 8),
-                        color: greyK.withOpacity(.1),
-                        child: Text(
-                            'Question: ${options[0].keys.elementAt(index)}\nAnswer: ${options[0].values.elementAt(index)}',
-                            style: montserrat),
-                      ),
-                    ),
-                  ),
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          width: Get.width,
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 8),
+                          color: greyK.withOpacity(.1),
+                          child: Text(
+                              'Question: ${_listTF[index].tFOption1}\nAnswer: ${_listTF[index].tFAns1}',
+                              style: montserrat),
+                        ),
+                        Container(
+                          width: Get.width,
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 8),
+                          color: greyK.withOpacity(.1),
+                          child: Text(
+                              'Question: ${_listTF[index].tFOption2}\nAnswer: ${_listTF[index].tFAns2}',
+                              style: montserrat),
+                        ),
+                        Container(
+                          width: Get.width,
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 8),
+                          color: greyK.withOpacity(.1),
+                          child: Text(
+                              'Question: ${_listTF[index].tFOption3}\nAnswer: ${_listTF[index].tFAns3}',
+                              style: montserrat),
+                        ),
+                        Container(
+                          width: Get.width,
+                          margin: const EdgeInsets.symmetric(vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 8),
+                          color: greyK.withOpacity(.1),
+                          child: Text(
+                              'Question: ${_listTF[index].tFOption4}\nAnswer: ${_listTF[index].tFAns4}',
+                              style: montserrat),
+                        ),
+                      ]),
                 ]),
           ),
         );

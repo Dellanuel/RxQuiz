@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
 import 'widgets.dart';
@@ -114,7 +113,7 @@ class _UserInfoState extends State<UserInfo> {
               label: 'Date of Birth',
               controller: dOB.value,
               icon: Icon(
-                Ionicons.calendar_outline,
+                Icons.calendar_today,
                 color: Get.theme.primaryColor,
               ),
               ontap: () {

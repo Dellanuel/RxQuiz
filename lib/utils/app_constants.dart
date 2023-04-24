@@ -18,23 +18,21 @@ final abeezee = GoogleFonts.aBeeZee(fontSize: 13, fontWeight: FontWeight.w400);
 final poppins = GoogleFonts.poppins(fontSize: 15, fontWeight: FontWeight.w400);
 
 /// use for appbar textstyles
-final bigBolo = bolo.copyWith(fontSize: 20, fontWeight: FontWeight.w600,overflow: TextOverflow.ellipsis);
+final bigBolo = bolo.copyWith(
+    fontSize: 20, fontWeight: FontWeight.w600, overflow: TextOverflow.ellipsis);
 
 // button styles
 ButtonStyle floatButton = textButtonStyl.copyWith(
   shape: const MaterialStatePropertyAll(CircleBorder()),
 );
 ButtonStyle textButtonStyl = ButtonStyle(
-    // elevation: const MaterialStatePropertyAll(0),
-    backgroundColor: MaterialStatePropertyAll(whiteK),
-    foregroundColor: MaterialStatePropertyAll(blackK),
-    shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-    )),
-    side: MaterialStatePropertyAll(BorderSide(
-      width: 2,
-      color: Get.theme.primaryColor,
-    )));
+  elevation: const MaterialStatePropertyAll(5),
+  backgroundColor: MaterialStatePropertyAll(Get.theme.primaryColor),
+  foregroundColor: MaterialStatePropertyAll(whiteK),
+  shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(20),
+  )),
+);
 
 // Colors
 Color greyblueK = Colors.blueGrey;

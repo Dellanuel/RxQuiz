@@ -1,12 +1,18 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pharm_quiz/UI/Screens/Quiz/quiz_questions.dart';
+import 'package:pharm_quiz/UI/strings.dart';
+import 'package:pharm_quiz/Functions/user_func.dart';
 
 import '../../../utils/app_constants.dart';
 import '../../../utils/app_widgets.dart';
-import 'model.dart';
+import '../../../Functions/datastore_func.dart';
+import '../User/widgets.dart';
 import 'quiz_trueorfalse.dart';
 import 'widget.dart';
 
@@ -21,35 +27,53 @@ List<Questions> quizQuestions = [];
 
 class _CreateQZState extends State<CreateQZ> {
   final _formKey = GlobalKey<FormState>();
-  final _quiztitleControl = TextEditingController();
-  final _quizDecriptionControl = TextEditingController();
-  String theme = '';
+  String? _title, _description;
+  Color? theme = Colors.blue;
+  bool isSaved = false;
   String course = '';
   bool _tF = false;
+  String? selectedValue;
+  final TextEditingController textEditingController = TextEditingController();
   final _whiteButton =
       ButtonStyle(backgroundColor: MaterialStatePropertyAll(whiteK));
 
-  _saveQuiz() {
-    QuizModel().toMap(QuizModel(
-      name: _quiztitleControl.text,
-      theme: theme,
-      course: course,
-      questions: quizQuestions,
-      trueFalse: _tF,
-      description: _quizDecriptionControl.text,
-      favorited: 0,
-      plays: 0,
-      dateModified:
-          '${DateTime.now().month.toString()}-${DateTime.now().day.toString()}-${DateTime.now().year.toString()}',
-    ));
-    Get.showSnackbar(const GetSnackBar(
-      // title: 'Error',
-      duration: Duration(seconds: 4),
-      message: 'Successfully added',
-      backgroundColor: Colors.green,
-      snackPosition: SnackPosition.TOP,
-      snackStyle: SnackStyle.GROUNDED,
-    ));
+  _saveQuiz() async {
+    await DatabaseHelper()
+        .createQuizz(
+      bank: QuizModel(
+        name: _title,
+        course: selectedValue,
+        authorsemail: userfile?.email ?? unknown,
+        authorsname: userfile?.userName ?? unknown,
+        description: _description ?? 'Test your knowledge in this course',
+        favorited: 0,
+        plays: 0,
+        dateModified: Timestamp.fromDate(DateTime.now()),
+      ),
+    )
+        .then((value) {
+      Get.showSnackbar(const GetSnackBar(
+        borderRadius: 15,
+        isDismissible: true,
+        duration: Duration(milliseconds: 1500),
+        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        message: "Successfully added",
+        snackPosition: SnackPosition.BOTTOM,
+      ));
+      Get.back();
+    });
+  }
+
+  File? imageFile;
+  pickImage() async {
+    XFile? pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1000,
+      maxHeight: 1000,
+    );
+    if (pickedFile != null) {
+      imageFile = File(pickedFile.path);
+    }
   }
 
   @override
@@ -60,7 +84,7 @@ class _CreateQZState extends State<CreateQZ> {
   @override
   void dispose() {
     super.dispose();
-    quizQuestions.clear();
+    // quizQuestions.clear();
   }
 
   @override
@@ -75,16 +99,6 @@ class _CreateQZState extends State<CreateQZ> {
           'Create Quiz',
           style: bigBolo,
         ),
-        actions: [
-          appbarButton(
-              icon: Icon(
-                Ionicons.save_outline,
-                color: Get.theme.primaryColor,
-              ),
-              onpressed: () {
-                _saveQuiz();
-              }),
-        ],
       ),
       body: Form(
         key: _formKey,
@@ -100,8 +114,18 @@ class _CreateQZState extends State<CreateQZ> {
                     borderRadius: curved,
                     border:
                         Border.all(width: 1, color: Get.theme.primaryColor)),
+                child: InkWell(
+                  onTap: pickImage,
+                  child: imageFile != null
+                      ? Image.file(imageFile!, fit: BoxFit.fill)
+                      : Center(
+                          child: Icon(Icons.image,
+                              color: Get.theme.primaryColor, size: 50),
+                        ),
+                ),
               ).paddingOnly(bottom: 15),
               textEditField(
+                  initialval: _title,
                   value: null,
                   trailTap: null,
                   tF: false,
@@ -112,10 +136,11 @@ class _CreateQZState extends State<CreateQZ> {
                       return null;
                     }
                   },
-                  controller: _quiztitleControl,
+                  controller: (_) => _title = _,
                   hint: 'Enter title',
                   label: 'Title'),
               textEditField(
+                  initialval: _description,
                   value: null,
                   trailTap: null,
                   tF: false,
@@ -126,146 +151,117 @@ class _CreateQZState extends State<CreateQZ> {
                       return null;
                     }
                   },
-                  controller: _quizDecriptionControl,
+                  controller: (_) => _description = _,
                   hint: 'Enter Description',
                   label: 'Description'),
-              textViewField(
-                  icon: const Icon(Ionicons.chevron_down_outline),
-                  ontap: () {},
-                  initialVal: null,
-                  controller: null,
-                  hint: 'Select Course',
-                  label: 'Course'),
-              textViewField(
-                  icon: Icon(Ionicons.color_palette_outline,
-                      color: Get.theme.primaryColor),
-                  ontap: () {},
-                  initialVal: null,
-                  controller: null,
-                  hint: 'Color Theme',
-                  label: 'Theme'),
-              quizQuestions.isEmpty
-                  ? Container()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Questions',
-                          style: poppins.copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        const Spacer(flex: 2),
-                        appbarButton(
-                            icon: const Icon(
-                              Ionicons.add,
-                            ),
-                            onpressed: () async {
-                              await Get.to(() => _tF
-                                      ? const TrueOrFalse()
-                                      : const QuestionAndAnswer())!
-                                  .whenComplete(() {
-                                setState(() {});
-                              });
-                            }),
-
-                        ///Button for additional or editing added questions.
-                        appbarButton(
-                            icon: const Icon(
-                              Ionicons.trash_outline,
-                              color: Colors.red,
-                            ),
-                            onpressed: () {
-                              Get.dialog(_showDelete());
-                            }),
-
-                        ///Button for deleting all added questions
-                      ],
-                    ).paddingOnly(bottom: 10),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Course',
+                    style: bolo.copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  dropDownButton(
+                    context: context,
+                    hintText: 'select course...',
+                    items: courses,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValue = value as String;
+                      });
+                    },
+                    selectedValue: selectedValue,
+                    textEditingController: textEditingController,
+                  ),
+                ],
+              ),
               Column(
                 children: List.generate(
                     quizQuestions.length, (index) => showQuestions(index)),
               ),
+              const SizedBox(height: 40),
+              isSaved
+                  ? Container()
+                  : Center(
+                      child: ElevatedButton(
+                          style: textButtonStyl,
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              await _saveQuiz();
+                              Get.bottomSheet(_showQuestionFormat());
+                            }
+                          },
+                          child: Text(
+                            'Add Questions',
+                            style: poppins.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ).paddingSymmetric(horizontal: 40, vertical: 20)),
+                    ),
               SizedBox(height: quizQuestions.isEmpty ? 0 : 40)
             ],
           ),
         ),
       ),
-      floatingActionButton: quizQuestions.isNotEmpty
-          ? Container()
-          : ElevatedButton(
-              style: textButtonStyl,
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Question Format',
-                              style: bigBolo,
-                            ),
-                            const Divider(
-                              height: 30,
-                              endIndent: 10,
-                              indent: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                quizGridTile(
-                                  ontap: () {
-                                    Get.to(() => const QuestionAndAnswer(),
-                                            transition: Transition.downToUp)!
-                                        .whenComplete(() {
-                                      _tF = false;
-                                      setState(() {});
-                                      Get.back();
-                                    });
-                                  },
-                                  icondata: CupertinoIcons.doc_plaintext,
-                                  title: 'Quiz',
-                                  color: Get.theme.primaryColor,
-                                ),
+    );
+  }
 
-                                ///For adding initial questions!
-                                quizGridTile(
-                                  ontap: () async {
-                                    _tF = true;
-                                    await Get.to(() => const TrueOrFalse(),
-                                            transition: Transition.downToUp)!
-                                        .whenComplete(() {
-                                      quizQuestions.isEmpty
-                                          ? _tF = false
-                                          : _tF = true;
-
-                                      setState(() {});
-                                      Get.back();
-                                    });
-                                  },
-                                  icondata:
-                                      CupertinoIcons.game_controller_solid,
-                                  title: 'True or False',
-                                  color: Colors.orange,
-                                ),
-
-                                ///For adding initial questions!
-                              ],
-                            ),
-                          ],
-                        ),
-                      );
+  Widget _showQuestionFormat() {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Question Format',
+              style: bigBolo,
+            ),
+            const Divider(
+              height: 30,
+              endIndent: 10,
+              indent: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                quizGridTile(
+                  ontap: () {
+                    Get.to(() => const QuestionAndAnswer(),
+                            transition: Transition.downToUp)!
+                        .whenComplete(() {
+                      _tF = false;
+                      setState(() {});
+                      Get.back();
                     });
-              },
-              child: Text(
-                'Add Questions',
-                style: poppins.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                  },
+                  icondata: CupertinoIcons.doc_plaintext,
+                  title: 'Quiz',
+                  color: Get.theme.primaryColor,
                 ),
-              ).paddingSymmetric(horizontal: 20, vertical: 15)),
+                quizGridTile(
+                  ontap: () async {
+                    _tF = true;
+                    await Get.to(() => const TrueOrFalse(),
+                            transition: Transition.downToUp)!
+                        .whenComplete(() {
+                      quizQuestions.isEmpty ? _tF = false : _tF = true;
+                      setState(() {});
+                      Get.back();
+                    });
+                  },
+                  icondata: CupertinoIcons.game_controller_solid,
+                  title: 'True or False',
+                  color: Colors.orange,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -293,7 +289,7 @@ class _CreateQZState extends State<CreateQZ> {
       title: Row(
         children: [
           const Icon(
-            Ionicons.trash_outline,
+            Icons.remove_circle_outline_rounded,
             color: Colors.red,
           ).marginOnly(right: 10),
           Expanded(
@@ -307,32 +303,6 @@ class _CreateQZState extends State<CreateQZ> {
     );
   }
 
-  // AlertDialog _showAdd() {
-  //   return AlertDialog(
-  //     insetPadding:
-  //         const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
-  //     actions: [
-  //       TextButton(
-  //           style: _whiteButton,
-  //           onPressed: () {
-  //             Get.back();
-  //           },
-  //           child: Text('cancel', style: poppins)),
-  //       TextButton(
-  //           style: _whiteButton,
-  //           onPressed: () {
-  //             // _quizQuestions.clear();
-  //             Get.back();
-  //             setState(() {});
-  //           },
-  //           child: Text('add', style: poppins)),
-  //     ],
-  //     title: Text(
-  //       'Add question',
-  //       style: bigBolo,
-  //     ),
-  //   );
-  // }
   showQuestions(int index) {
     return GestureDetector(
       onTap: () {
@@ -374,39 +344,3 @@ class _CreateQZState extends State<CreateQZ> {
     );
   }
 }
-
-//   showTF(int index) {
-//     return Container(
-//       margin: const EdgeInsets.only(bottom: 10),
-//       constraints: const BoxConstraints(maxHeight: 55),
-//       decoration: BoxDecoration(
-//         borderRadius: curved,
-//         color: deepSeaBlueK,
-//       ),
-//       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: [
-//           Container(
-//             padding: const EdgeInsets.all(10),
-//             margin: const EdgeInsets.only(right: 10),
-//             decoration:
-//                 ShapeDecoration(color: whiteK, shape: const CircleBorder()),
-//             child: Text(
-//               (index + 1).toString(),
-//               style:
-//                   bolo.copyWith(color: blackK, overflow: TextOverflow.ellipsis),
-//             ),
-//           ),
-//           Expanded(
-//               child: Text(
-//             quizQuestions[index].tFquestion!,
-//             style:
-//                 bolo.copyWith(color: whiteK, overflow: TextOverflow.ellipsis),
-//           )),
-//         ],
-//       ),
-//     );
-//   }
-// }

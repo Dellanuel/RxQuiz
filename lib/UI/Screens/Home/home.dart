@@ -1,11 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:pharm_quiz/UI/Screens/Features/discover_page.dart';
-import 'package:pharm_quiz/UI/Screens/Profile/profile.dart';
+import 'package:pharm_quiz/UI/Screens/User/notification.dart';
+import 'package:pharm_quiz/UI/Screens/User/profile.dart';
 import 'package:pharm_quiz/utils/app_constants.dart';
+import '../../../Functions/datastore_func.dart';
 import '../../../utils/app_widgets.dart';
-import '../Profile/settings.dart';
+import '../../../utils/slivers.dart';
 import 'home_widgets.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,6 +19,23 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    timer = Timer.periodic(const Duration(minutes: 1), (timer) async {
+      await DatabaseHelper().getQuestionCollections();
+      setState(() {});
+    });
+  }
+
+  late Timer timer;
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,11 +73,13 @@ class _HomePageState extends State<HomePage> {
             actions: [
               appbarButton(
                 onpressed: () {},
-                icon: const Icon(Ionicons.search_outline),
+                icon: const Icon(Icons.search),
               ),
               appbarButton(
-                onpressed: () {},
-                icon: const Icon(Ionicons.notifications_outline),
+                onpressed: () {
+                  Get.to(() => AppNotification());
+                },
+                icon: const Icon(Icons.notifications),
               ),
             ],
           ),
@@ -100,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                         style: raleway.copyWith(color: Get.theme.primaryColor),
                       ),
                       Icon(
-                        Ionicons.chevron_forward_outline,
+                        Icons.chevron_left,
                         size: 15,
                         color: Get.theme.primaryColor,
                       )
@@ -111,7 +133,56 @@ class _HomePageState extends State<HomePage> {
             ).paddingSymmetric(horizontal: 22),
           ),
           SliverToBoxAdapter(
-            child: discoverQuiz(),
+            child: ClipRRect(
+              borderRadius: curved,
+              child: FutureBuilder<List<QuizModel>>(
+                  future: DatabaseHelper().getQuestionCollections(),
+                  builder: (context, snapshot) {
+                    final data = snapshot.data;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SizedBox(
+                        height: 208,
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.only(left: 15),
+                          physics: const BouncingScrollPhysics(),
+                          child: Row(
+                            children: List.generate(
+                              5,
+                              (index) =>
+                                  gridTileShimmer().paddingOnly(right: 15),
+                            ),
+                          ),
+                        ),
+                      );
+                    } else {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        return discoverQuiz(
+                            data: data!, dataLength: data.length);
+                      } else {
+                        return Container(
+                          height: 208,
+                          color: greyK.withOpacity(.2),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Icon(Icons.error_outline_rounded,
+                                  size: 30, color: greyK),
+                              const SizedBox(height: 10),
+                              Text(
+                                'No available Data',
+                                style:
+                                    bolo.copyWith(fontSize: 20, color: greyK),
+                              )
+                            ],
+                          ),
+                        );
+                      }
+                    }
+                  }),
+            ),
           ),
           SliverToBoxAdapter(
             child: trendingWidget(),
