@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,30 +39,19 @@ class _CreateQZState extends State<CreateQZ> {
       ButtonStyle(backgroundColor: MaterialStatePropertyAll(whiteK));
 
   _saveQuiz() async {
-    await DatabaseHelper()
-        .createQuizz(
+    await DatabaseHelper().createQuizz(
       bank: QuizModel(
+        questions: quizQuestions,
         name: _title,
         course: selectedValue,
         authorsemail: userfile?.email ?? unknown,
         authorsname: userfile?.userName ?? unknown,
-        description: _description ?? 'Test your knowledge in this course',
+        description: _description ?? 'Test your knowledge in this course.',
         favorited: 0,
         plays: 0,
         dateModified: Timestamp.fromDate(DateTime.now()),
       ),
-    )
-        .then((value) {
-      Get.showSnackbar(const GetSnackBar(
-        borderRadius: 15,
-        isDismissible: true,
-        duration: Duration(milliseconds: 1500),
-        margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-        message: "Successfully added",
-        snackPosition: SnackPosition.BOTTOM,
-      ));
-      Get.back();
-    });
+    );
   }
 
   File? imageFile;
@@ -99,6 +89,13 @@ class _CreateQZState extends State<CreateQZ> {
           'Create Quiz',
           style: bigBolo,
         ),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                await _saveQuiz();
+              },
+              icon: Icon(Icons.save))
+        ],
       ),
       body: Form(
         key: _formKey,
@@ -186,9 +183,9 @@ class _CreateQZState extends State<CreateQZ> {
                   : Center(
                       child: ElevatedButton(
                           style: textButtonStyl,
-                          onPressed: () async {
+                          onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              await _saveQuiz();
+                              // await _saveQuiz();
                               Get.bottomSheet(_showQuestionFormat());
                             }
                           },

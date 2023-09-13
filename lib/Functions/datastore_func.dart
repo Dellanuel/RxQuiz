@@ -7,13 +7,12 @@ import 'package:flutter/material.dart';
 
 ///Quiz model.
 class QuizModel {
-  static const questBankKey = 'Question Bank';
+  static const questBankKey = 'Question_Collection';
   static const quiznameKey = 'Quiz_name';
   static const descriptionKey = 'description';
   static const courseKey = 'course';
   static const fieldImageKey = 'field_image';
   static const favoritedKey = 'favorited';
-  static const questionsKey = 'questions';
   static const playsKey = 'plays';
   static const dateModifiedKey = 'date_modified';
   static const authorsnameKey = 'authors_name';
@@ -28,6 +27,7 @@ class QuizModel {
   Timestamp? dateModified;
   String? authorsname;
   String? authorsemail;
+  List<Questions>? questions;
 
   QuizModel({
     this.name,
@@ -39,6 +39,7 @@ class QuizModel {
     this.dateModified,
     this.authorsname,
     this.authorsemail,
+    this.questions,
   });
 
   Map<String, dynamic> toMap(QuizModel data) {
@@ -52,26 +53,27 @@ class QuizModel {
     map[dateModifiedKey] = data.dateModified;
     map[authorsnameKey] = data.authorsname;
     map[authorsemailKey] = data.authorsemail;
+    map['Questions'] = data.questions!.map((i) => i.toMap(i)).toList();
 
     return map;
   }
 
-  QuizModel.toClass(Map<String, dynamic> map) {
-    name = map[quiznameKey];
-    course = map[courseKey];
-    description = map[descriptionKey];
-    favorited = map[favoritedKey];
-    plays = map[playsKey];
-    dateModified = map[dateModifiedKey];
-    authorsname = map[authorsnameKey];
-    authorsemail = map[authorsemailKey];
-    fieldImage = map[fieldImageKey];
+  QuizModel.toClass(Map<String, dynamic> data) {
+    name = data[quiznameKey];
+    course = data[courseKey];
+    description = data[descriptionKey];
+    favorited = data[favoritedKey];
+    plays = data[playsKey];
+    dateModified = data[dateModifiedKey];
+    authorsname = data[authorsnameKey];
+    authorsemail = data[authorsemailKey];
+    fieldImage = data[fieldImageKey];
+    questions = data['Questions'].map<Questions>((i) => Questions.toClass(i)).toList();
   }
 }
 
 class Questions {
   static const questionTypeKey = 'is_tF';
-
   static const questionKey = 'question';
   static const tFOption1Key = 'tF_Opt_1';
   static const tFOption2Key = 'tF_Opt_2';
@@ -87,6 +89,7 @@ class Questions {
   static const incorrectAnswer2Key = 'Incorrect_2';
   static const incorrectAnswer3Key = 'Incorrect_3';
 
+  String? id;
   String? tFOption1, tFOption2, tFOption3, tFOption4;
   bool? tFAns1, tFAns2, tFAns3, tFAns4;
   String? question;
@@ -94,6 +97,7 @@ class Questions {
   String? correctAnswer, incorrectAnswer1, incorrectAnswer2, incorrectAnswer3;
 
   Questions({
+    this.id,
     this.isTrueFalse,
     this.question,
     this.tFOption1,
@@ -113,7 +117,7 @@ class Questions {
   Map<String, dynamic> toMap(Questions data) {
     Map<String, dynamic> map = {};
     map[questionTypeKey] = data.isTrueFalse ?? false;
-
+    map['Question_number'] = data.id;
     map[questionKey] = data.question;
     map[tFOption1Key] = data.tFAns1;
     map[tFOption2Key] = data.tFAns2;
@@ -129,7 +133,7 @@ class Questions {
 
   Questions.toClass(Map<String, dynamic> map) {
     isTrueFalse = map[questionTypeKey];
-
+    id = map['Question_number'];
     question = map[questionKey];
     tFOption1 = map[tFOption1Key];
     tFOption2 = map[tFOption2Key];
@@ -159,10 +163,29 @@ class DatabaseHelper {
             value.docs.map((e) => QuizModel.toClass(e.data())).toList());
   }
 
+  /// for getting questions
+  Future<List<QuizModel>> getQuestions({required String title}) async {
+    return await _firebaseFirestore.collection(title).get().then(
+        (value) => value.docs.map((e) => QuizModel.toClass(e.data())).toList());
+  }
+
+  /// for setting questions
+  Future createQuestions(
+      {required String? title, required Questions data}) async {
+    return await _firebaseFirestore
+        .collection('Question_Bank')
+        .doc(title)
+        .collection('Questions')
+        .add(data.toMap(data));
+    // .doc(data.id)
+    // .set(data.toMap(data), SetOptions(merge: true));
+  }
+
+  /// for creating quiz
   Future createQuizz({required QuizModel bank}) async {
     return await _firebaseFirestore
         .collection(QuizModel.questBankKey)
-        .doc(bank.authorsname)
+        .doc(bank.name)
         .set(bank.toMap(bank), SetOptions(merge: true));
   }
 
@@ -176,15 +199,13 @@ class DatabaseHelper {
   // }
 
   ///for adding a question
-  Future addOrEditQuestion(
-      Questions question, String course, String author, String title) async {
-    return await _firebaseFirestore
-        .collection(QuizModel.questBankKey)
-        .doc(course)
-        .collection(author)
-        .doc(title)
-        .set(question.toMap(question), SetOptions(merge: true));
-  }
+  // Future addOrEditQuestion(
+  //     Questions question, String course, String author, String title) async {
+  //   return await _firebaseFirestore
+  //       .collection(QuizModel.questBankKey)
+  //       .doc(title).collection(QuizModel.questionsKey).doc(question.question)
+  //       .set(question.toMap(question), SetOptions(merge: true));
+  // }
 }
 
 FirebaseStorage firebaseStorage = FirebaseStorage.instance;

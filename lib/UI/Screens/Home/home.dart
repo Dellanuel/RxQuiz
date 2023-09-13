@@ -138,50 +138,47 @@ class _HomePageState extends State<HomePage> {
               child: FutureBuilder<List<QuizModel>>(
                   future: DatabaseHelper().getQuestionCollections(),
                   builder: (context, snapshot) {
-                    final data = snapshot.data;
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return SizedBox(
-                        height: 208,
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.only(left: 15),
-                          physics: const BouncingScrollPhysics(),
-                          child: Row(
-                            children: List.generate(
-                              5,
-                              (index) =>
-                                  gridTileShimmer().paddingOnly(right: 15),
-                            ),
-                          ),
+                final data = snapshot.data;
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SizedBox(
+                    height: 208,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.only(left: 15),
+                      physics: const BouncingScrollPhysics(),
+                      child: Row(
+                        children: List.generate(
+                          5,
+                          (index) => gridTileShimmer().paddingOnly(right: 15),
                         ),
-                      );
-                    } else {
-                      if (snapshot.connectionState == ConnectionState.done &&
-                          snapshot.hasData) {
-                        return discoverQuiz(
-                            data: data!, dataLength: data.length);
-                      } else {
-                        return Container(
-                          height: 208,
-                          color: greyK.withOpacity(.2),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(Icons.error_outline_rounded,
-                                  size: 30, color: greyK),
-                              const SizedBox(height: 10),
-                              Text(
-                                'No available Data',
-                                style:
-                                    bolo.copyWith(fontSize: 20, color: greyK),
-                              )
-                            ],
-                          ),
-                        );
-                      }
-                    }
-                  }),
+                      ),
+                    ),
+                  );
+                } else {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    return discoverQuiz(data: data!, dataLength: data.length);
+                  } else {
+                    return Container(
+                      height: 208,
+                      color: greyK.withOpacity(.2),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(Icons.error_outline_rounded,
+                              size: 30, color: greyK),
+                          const SizedBox(height: 10),
+                          Text(
+                            'No available Data',
+                            style: bolo.copyWith(fontSize: 20, color: greyK),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                }
+              }),
             ),
           ),
           SliverToBoxAdapter(
